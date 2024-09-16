@@ -1,5 +1,4 @@
 import { ReactElement } from "react";
-import type { Handle } from "@xyflow/react";
 
 export type RoundedProps = {
   shape: RoundedShapeProps;
@@ -19,5 +18,5 @@ export interface RoundedChildrenProps {
   middle?: ReactElement;
   bottom?: ReactElement;
 
-  handles?: Handle[];
+  handles?: JSX.Element[];
 }

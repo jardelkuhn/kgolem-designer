@@ -9,11 +9,13 @@ export function RoundedShape({ shape, children }: RoundedProps) {
     >
       <TopWrapper>{children?.top}</TopWrapper>
 
-      <MiddleWrapper borderColor={shape.borderColor}></MiddleWrapper>
+      <MiddleWrapper borderColor={shape.borderColor}>
+        {children?.middle}
+      </MiddleWrapper>
 
       <BottomWrapper></BottomWrapper>
 
-      <>{children?.handles}</>
+      {children?.handles}
     </Container>
   );
 }
