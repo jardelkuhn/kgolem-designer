@@ -1,5 +1,4 @@
-import type { BuiltInNode, Node } from "@xyflow/react";
+import type { BuiltInNode } from "@xyflow/react";
+import { WANode } from "./wa/types";
 
-export type StartNodeType = Node<{ label: string }, "start">;
-
-export type AppNode = BuiltInNode | StartNodeType;
+export type AppNode = BuiltInNode | WANode;

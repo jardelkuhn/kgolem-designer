@@ -1,13 +1,12 @@
 import { Handle, NodeProps, Position } from "@xyflow/react";
 
-import { StartNodeType } from "../types";
-import { RoundedShape } from "../shapes/rounded";
 import topContent from "./content/top/top.content";
 import middleContent from "./content/middle/middle.content";
+import { WAStartNodeType } from "../types";
+import { RoundedShape } from "../../shapes/rounded";
+import waColors from "../wa.colors";
 
-export function StartNode({ data }: NodeProps<StartNodeType>) {
-  console.log(data);
-
+export function WAStartNode({ data }: NodeProps<WAStartNodeType>) {
   const handles = [
     <Handle
       id="a"
@@ -20,10 +19,13 @@ export function StartNode({ data }: NodeProps<StartNodeType>) {
 
   return (
     <RoundedShape
-      shape={{ borderColor: "#50C878", backgroundColor: "#e5e5e5" }}
+      shape={{
+        borderColor: waColors.borderColor,
+        backgroundColor: waColors.backgroundColor,
+      }}
       children={{
         top: topContent,
-        middle: middleContent,
+        middle: middleContent(data.label),
         handles: handles,
       }}
     />
