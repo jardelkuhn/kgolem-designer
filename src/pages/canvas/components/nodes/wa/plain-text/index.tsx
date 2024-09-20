@@ -1,4 +1,4 @@
-import { Handle, NodeProps, Position } from "@xyflow/react";
+import { NodeProps } from "@xyflow/react";
 
 import { WAStartNodeType } from "../types";
 import { RectangleShape } from "../../shapes/rectangle";
@@ -6,15 +6,6 @@ import waTheming from "../wa.theming";
 import { fonts, textFont } from "../../shapes/fonts";
 
 export function WAPlainTextNode({ data }: NodeProps<WAStartNodeType>) {
-  const handles = [
-    <Handle
-      id="a"
-      type="source"
-      position={Position.Right}
-      isConnectable={true}
-    />,
-  ];
-
   return (
     <RectangleShape
       shape={{
@@ -32,7 +23,7 @@ export function WAPlainTextNode({ data }: NodeProps<WAStartNodeType>) {
             {data.label}
           </span>
         ),
-        handles: handles,
+        handles: data.handles,
       }}
     />
   );

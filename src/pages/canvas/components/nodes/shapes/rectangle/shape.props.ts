@@ -3,7 +3,7 @@ import { ReactElement } from "react";
 export type RectangleProps = {
   shape: RectangleShapeProps;
   options: RectangleOptionProps;
-  children?: RectangleChildrenProps;
+  children: RectangleChildrenProps;
 };
 
 export interface RectangleShapeProps {
@@ -18,6 +18,7 @@ export interface RectangleOptionProps {
 }
 
 export interface RectangleChildrenProps {
+  uuid: string;
   content: ReactElement;
-  handles?: JSX.Element[];
+  handles: ReactElement[];
 }

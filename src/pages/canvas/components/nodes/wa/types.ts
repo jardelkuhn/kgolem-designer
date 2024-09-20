@@ -1,6 +1,8 @@
 import type { Node } from "@xyflow/react";
 
-export type WAStartNodeType = Node<{ label: string }, "WAStart">;
-export type WAPlainTextNodeType = Node<{ label: string }, "WAPlainText">;
+import { CustomNodeProps } from "../types";
+
+export type WAStartNodeType = Node<CustomNodeProps, "WAStart">;
+export type WAPlainTextNodeType = Node<CustomNodeProps, "WAPlainText">;
 
 export type WANode = WAStartNodeType | WAPlainTextNodeType;

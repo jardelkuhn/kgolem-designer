@@ -3,7 +3,7 @@ import { ReactElement } from "react";
 export type RoundedProps = {
   shape: RoundedShapeProps;
   options: RoundedOptionProps;
-  children?: RoundedChildrenProps;
+  children: RoundedChildrenProps;
 };
 
 export interface RoundedShapeProps {
@@ -18,6 +18,7 @@ export interface RoundedOptionProps {
 }
 
 export interface RoundedChildrenProps {
+  uuid: string;
   content: ReactElement;
-  handles?: JSX.Element[];
+  handles: ReactElement[];
 }

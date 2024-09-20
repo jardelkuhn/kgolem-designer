@@ -1,4 +1,4 @@
-import { Handle, NodeProps, Position } from "@xyflow/react";
+import { NodeProps } from "@xyflow/react";
 
 import { WAStartNodeType } from "../types";
 import { RoundedShape } from "../../shapes/rounded";
@@ -6,15 +6,6 @@ import waColors from "../wa.theming";
 import { fonts, textFont } from "../../shapes/fonts";
 
 export function WAStartNode({ data }: NodeProps<WAStartNodeType>) {
-  const handles = [
-    <Handle
-      id="a"
-      type="source"
-      position={Position.Right}
-      isConnectable={true}
-    />,
-  ];
-
   return (
     <RoundedShape
       shape={{
@@ -32,7 +23,8 @@ export function WAStartNode({ data }: NodeProps<WAStartNodeType>) {
             {data.label}
           </span>
         ),
-        handles: handles,
+        handles: data.handles,
+        uuid: data.uuid,
       }}
     />
   );
