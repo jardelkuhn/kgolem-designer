@@ -1,10 +1,8 @@
 ![](https://github.com/xyflow/web/blob/main/assets/codesandbox-header-ts.png?raw=true)
 
-# React Flow starter (Vite + TS)
+# React Flow Canvas Demo (Vite + TS)
+- [Live Demo - gh-pages](https://jackanakin.github.io/jackchat-canvas)
 
-We've put together this template to serve as a starting point for folks
-interested in React Flow. You can use this both as a base for your own React
-Flow applications, or for small experiments or bug reports.
 
 **TypeScript not your thing?** We also have a vanilla JavaScript starter template,
 just for you!
