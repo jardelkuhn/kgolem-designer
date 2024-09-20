@@ -2,21 +2,22 @@ import { ReactElement } from "react";
 
 export type RoundedProps = {
   shape: RoundedShapeProps;
+  options: RoundedOptionProps;
   children?: RoundedChildrenProps;
 };
 
 export interface RoundedShapeProps {
-  borderColor: string;
-  backgroundColor: string;
-  topBackground?: string;
-  middleBackground?: string;
-  bottomBackground?: string;
+  background: string;
+  border: string;
+}
+
+export interface RoundedOptionProps {
+  title: string;
+  providerIcon: string;
+  familyIcon: string;
 }
 
 export interface RoundedChildrenProps {
-  top?: ReactElement;
-  middle?: ReactElement;
-  bottom?: ReactElement;
-
+  content: ReactElement;
   handles?: JSX.Element[];
 }

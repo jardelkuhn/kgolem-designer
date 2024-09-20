@@ -1,21 +1,40 @@
+import { FamilyIcon } from "../icons";
 import { RoundedProps } from "./shape.props";
-import { BottomWrapper, Container, MiddleWrapper, TopWrapper } from "./styles";
+import {
+  BottomWrapper,
+  Container,
+  DefaultTopContentContainer,
+  DefaultTopContentLabel,
+  MiddleWrapper,
+  ProviderCircle,
+  RoundedMiddleContainer,
+  RoundedMiddleLabel,
+  TopWrapper,
+} from "./styles";
 
-export function RoundedShape({ shape, children }: RoundedProps) {
+export function RoundedShape({ shape, options, children }: RoundedProps) {
   return (
-    <Container
-      borderColor={shape.borderColor}
-      backgroundColor={shape.backgroundColor}
-    >
-      <TopWrapper>{children?.top}</TopWrapper>
+    <Container background={shape.background}>
+      <TopWrapper>
+        <DefaultTopContentContainer>
+          <FamilyIcon className={options.familyIcon} />
+          <DefaultTopContentLabel>{options.title}</DefaultTopContentLabel>
+        </DefaultTopContentContainer>
+      </TopWrapper>
 
-      <MiddleWrapper borderColor={shape.borderColor}>
-        {children?.middle}
+      <MiddleWrapper border={shape.border}>
+        <RoundedMiddleContainer>
+          <RoundedMiddleLabel>{options.title}</RoundedMiddleLabel>
+        </RoundedMiddleContainer>
       </MiddleWrapper>
 
       <BottomWrapper></BottomWrapper>
 
       {children?.handles}
+
+      <ProviderCircle>
+        <FamilyIcon className={options.providerIcon} />
+      </ProviderCircle>
     </Container>
   );
 }

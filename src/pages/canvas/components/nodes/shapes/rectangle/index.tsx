@@ -1,30 +1,40 @@
+import { FamilyIcon } from "../icons";
 import { RectangleProps } from "./shape.props";
 import {
   Container,
   IconWrapper,
   LabelWrapper,
   MainWrapper,
+  ProviderCircle,
+  RectangleIconContainer,
+  RectangleMainContainer,
+  RectangleMainSpan,
   TopWrapper,
 } from "./styles";
 
-export function RectangleShape({ shape, children }: RectangleProps) {
+export function RectangleShape({ shape, options, children }: RectangleProps) {
   return (
-    <Container
-      borderColor={shape.borderColor}
-      backgroundColor={shape.backgroundColor}
-    >
+    <Container background={shape.background}>
       <TopWrapper>
-        <IconWrapper borderColor={shape.borderColor}>
-          {children?.icon}
+        <IconWrapper border={shape.border}>
+          <RectangleIconContainer>
+            <FamilyIcon className={options.familyIcon} />
+          </RectangleIconContainer>
         </IconWrapper>
-        <LabelWrapper>{children?.topLabel}</LabelWrapper>
+        <LabelWrapper>
+          <RectangleMainContainer>
+            <RectangleMainSpan>{options.title}</RectangleMainSpan>
+          </RectangleMainContainer>
+        </LabelWrapper>
       </TopWrapper>
 
-      <MainWrapper borderColor={shape.borderColor}>
-        {children?.mainLabel}
-      </MainWrapper>
+      <MainWrapper border={shape.border}>{children?.content}</MainWrapper>
 
       {children?.handles}
+
+      <ProviderCircle>
+        <FamilyIcon className={options.providerIcon} />
+      </ProviderCircle>
     </Container>
   );
 }

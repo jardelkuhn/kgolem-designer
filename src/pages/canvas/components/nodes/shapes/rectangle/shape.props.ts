@@ -2,21 +2,22 @@ import { ReactElement } from "react";
 
 export type RectangleProps = {
   shape: RectangleShapeProps;
+  options: RectangleOptionProps;
   children?: RectangleChildrenProps;
 };
 
 export interface RectangleShapeProps {
-  borderColor: string;
-  backgroundColor: string;
-  topBackground?: string;
-  middleBackground?: string;
-  bottomBackground?: string;
+  background: string;
+  border: string;
+}
+
+export interface RectangleOptionProps {
+  title: string;
+  providerIcon: string;
+  familyIcon: string;
 }
 
 export interface RectangleChildrenProps {
-  icon: ReactElement;
-  topLabel: ReactElement;
-  mainLabel: ReactElement;
-  
+  content: ReactElement;
   handles?: JSX.Element[];
 }

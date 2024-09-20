@@ -1,10 +1,9 @@
 import { Handle, NodeProps, Position } from "@xyflow/react";
 
-import topContent from "./content/top/top.content";
-import middleContent from "./content/middle/middle.content";
 import { WAStartNodeType } from "../types";
 import { RoundedShape } from "../../shapes/rounded";
-import waColors from "../wa.colors";
+import waColors from "../wa.theming";
+import { fonts, textFont } from "../../shapes/fonts";
 
 export function WAStartNode({ data }: NodeProps<WAStartNodeType>) {
   const handles = [
@@ -12,7 +11,6 @@ export function WAStartNode({ data }: NodeProps<WAStartNodeType>) {
       id="a"
       type="source"
       position={Position.Right}
-      // style={{ background: "#555" }}
       isConnectable={true}
     />,
   ];
@@ -20,12 +18,20 @@ export function WAStartNode({ data }: NodeProps<WAStartNodeType>) {
   return (
     <RoundedShape
       shape={{
-        borderColor: waColors.borderColor,
-        backgroundColor: waColors.backgroundColor,
+        border: waColors.border,
+        background: waColors.background,
+      }}
+      options={{
+        title: "Início",
+        providerIcon: "bi bi-whatsapp",
+        familyIcon: "bi bi-lightning-fill",
       }}
       children={{
-        top: topContent,
-        middle: middleContent(data.label),
+        content: (
+          <span style={{ ...fonts, fontSize: textFont.description }}>
+            {data.label}
+          </span>
+        ),
         handles: handles,
       }}
     />

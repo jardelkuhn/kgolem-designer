@@ -2,10 +2,8 @@ import { Handle, NodeProps, Position } from "@xyflow/react";
 
 import { WAStartNodeType } from "../types";
 import { RectangleShape } from "../../shapes/rectangle";
-import iconContent from "./content/icon/icon.content";
-import waColors from "../wa.colors";
-import topLabelContent from "./content/top-label/top-label.content";
-import mainLabel from "./content/main-label/main-label.content";
+import waTheming from "../wa.theming";
+import { fonts, textFont } from "../../shapes/fonts";
 
 export function WAPlainTextNode({ data }: NodeProps<WAStartNodeType>) {
   const handles = [
@@ -13,7 +11,6 @@ export function WAPlainTextNode({ data }: NodeProps<WAStartNodeType>) {
       id="a"
       type="source"
       position={Position.Right}
-      // style={{ background: "#555" }}
       isConnectable={true}
     />,
   ];
@@ -21,14 +18,20 @@ export function WAPlainTextNode({ data }: NodeProps<WAStartNodeType>) {
   return (
     <RectangleShape
       shape={{
-        borderColor: waColors.borderColor,
-        backgroundColor: waColors.backgroundColor,
+        border: waTheming.border,
+        background: waTheming.background,
+      }}
+      options={{
+        title: "Enviar texto",
+        providerIcon: "bi bi-whatsapp",
+        familyIcon: "bi bi-body-text",
       }}
       children={{
-        icon: iconContent,
-        topLabel: topLabelContent(),
-        mainLabel: mainLabel(data.label),
-
+        content: (
+          <span style={{ ...fonts, fontSize: textFont.description }}>
+            {data.label}
+          </span>
+        ),
         handles: handles,
       }}
     />
