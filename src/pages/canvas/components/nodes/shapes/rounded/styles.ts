@@ -1,13 +1,13 @@
 import styled from "styled-components";
-import { getDescriptionFonts, getTitleFonts } from "../fonts";
+import { getDescriptionFonts, getTitleFonts } from "../default.theming";
 
-type ContainerProps = {
+interface ContainerProps {
   background: string;
-};
+}
 
-type MiddleProps = {
+interface MiddleProps {
   border: string;
-};
+}
 
 export const Container = styled.div<ContainerProps>`
   position: relative;

@@ -1,5 +1,11 @@
 import type { EdgeTypes } from "@xyflow/react";
 
+import CustomEdge from "./custom";
+
+export enum EdgeType {
+  CustomEdge = "CustomEdge",
+}
+
 export const edgeTypes = {
-  // Add your custom edge types here!
+  CustomEdge: CustomEdge,
 } satisfies EdgeTypes;

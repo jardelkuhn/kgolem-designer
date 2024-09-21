@@ -3,7 +3,6 @@ import {
   addEdge,
   ColorMode,
   Edge,
-  FinalConnectionState,
   OnConnect,
   OnConnectStartParams,
   ReactFlow,
@@ -15,7 +14,7 @@ import {
 import HandleFactory from "./handle.factory";
 import { DefaultProviderProps } from "../types";
 import { nodeTypes } from "../../pages/canvas/components/nodes";
-import { edgeTypes } from "../../pages/canvas/components/edges";
+import { EdgeType, edgeTypes } from "../../pages/canvas/components/edges";
 import { AppNode } from "../../pages/canvas/components/nodes/types";
 import { useDnD } from "../dnd/dnd.provider";
 import { Container, ReactFlowWrapper } from "./styles";
@@ -60,7 +59,12 @@ export function CanvasProvider(props: DefaultProviderProps) {
 
   const onConnect: OnConnect = useCallback(
     (connection) => {
-      setEdges((edges) => addEdge({ ...connection, animated: true }, edges));
+      setEdges((edges) =>
+        addEdge(
+          { ...connection, animated: true, type: EdgeType.CustomEdge },
+          edges
+        )
+      );
     },
     [setEdges]
   );
@@ -80,7 +84,7 @@ export function CanvasProvider(props: DefaultProviderProps) {
     setConnectStartParams(params);
   };
 
-  const onConnectEnd = (_event: unknown, _params: FinalConnectionState) => {
+  const onConnectEnd = () => {
     setConnectStartParams(undefined);
   };
 
@@ -90,7 +94,6 @@ export function CanvasProvider(props: DefaultProviderProps) {
   }, []);
 
   const onDrop = useCallback(
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (event: React.DragEvent<HTMLDivElement>) => {
       event.preventDefault();
 
@@ -143,18 +146,19 @@ export function CanvasProvider(props: DefaultProviderProps) {
       value={{
         nodeEntered,
         connectStartParams,
-        // nodes,
         edges,
       }}
     >
       <Container>
         <ReactFlowWrapper ref={reactFlowWrapper}>
           <ReactFlow
+            fitView
+            elementsSelectable
+            deleteKeyCode="Delete"
             nodes={nodes}
             edges={edges}
             nodeTypes={nodeTypes}
             edgeTypes={edgeTypes}
-            elementsSelectable={true}
             onNodesChange={onNodesChange}
             onEdgesChange={onEdgesChange}
             onNodeMouseEnter={onNodeMouseEnter}
@@ -165,7 +169,6 @@ export function CanvasProvider(props: DefaultProviderProps) {
             colorMode={colorMode}
             onDrop={onDrop}
             onDragOver={onDragOver}
-            fitView
           >
             {props.children}
           </ReactFlow>

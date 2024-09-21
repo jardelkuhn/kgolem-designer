@@ -4,6 +4,7 @@ import { useDnD } from "../../../../../context/dnd/dnd.provider";
 import { Aside, Description } from "./styles";
 import { WAPlainTextDnD } from "../../nodes/wa/plain-text/dnd";
 import { NodeType } from "../../nodes";
+import { WAStartDnD } from "../../nodes/wa/start/dnd";
 
 export function WhatsAppSidebar() {
   const { setType } = useDnD();
@@ -21,6 +22,7 @@ export function WhatsAppSidebar() {
       <Description>
         You can drag these nodes to the pane on the left
       </Description>
+      <WAStartDnD onDragStart={onDragStart} />
       <WAPlainTextDnD onDragStart={onDragStart} />
     </Aside>
   );

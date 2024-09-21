@@ -1,9 +1,10 @@
-import { Connection, HandleType, Position } from "@xyflow/react";
+import { useCallback, useEffect, useState } from "react";
+import { HandleType, Position } from "@xyflow/react";
 
 import { Container } from "./styles";
-import { useCanvas } from "../../../../context/canvas/canvas.provider";
-import { useCallback, useEffect, useState } from "react";
+import { useCanvas } from "../../../../../context/canvas/canvas.provider";
 import { Visibility } from "./types";
+import { edgeIsConnection } from "../../../../../utilities/edge.utilities";
 
 interface Props {
   id?: string;
@@ -34,6 +35,22 @@ export function CustomHandle(props: Props) {
     return connectStartParams?.nodeId === props.parentId;
   }, [connectStartParams, props.parentId]);
 
+  const redundantConnection = useCallback(() => {
+    const sourceNode = connectStartParams?.nodeId;
+
+    const existingEdgeWayTo =
+      edges.filter(
+        (edge) => edge.source === sourceNode && edge.target === props.parentId
+      ).length > 0;
+
+    const existingEdgeWayBack =
+      edges.filter(
+        (edge) => edge.target === sourceNode && edge.source === props.parentId
+      ).length > 0;
+
+    return existingEdgeWayTo || existingEdgeWayBack;
+  }, [connectStartParams?.nodeId, edges, props.parentId]);
+
   const checkSourceTypeVisibility = useCallback(() => {
     let visibility: Visibility = "hidden";
 
@@ -59,8 +76,12 @@ export function CustomHandle(props: Props) {
       visibility = "hidden";
     }
 
+    if (redundantConnection()) {
+      visibility = "hidden";
+    }
+
     setVisible(visibility);
-  }, [connectionInProgress, parentIsConnectStart]);
+  }, [connectionInProgress, parentIsConnectStart, redundantConnection]);
 
   const checkActive = useCallback((): boolean => {
     const matches = edges.filter((edge) => {
@@ -99,13 +120,9 @@ export function CustomHandle(props: Props) {
     checkVisibility();
   }, [checkVisibility]);
 
-  function isConnection(edge: unknown): edge is Connection {
-    return (edge as Connection).source !== undefined;
-  }
-
   const isValidConnection = useCallback(
     (edge: unknown) => {
-      if (isConnection(edge)) {
+      if (edgeIsConnection(edge)) {
         const existingEdgeWayTo =
           edges.filter(
             (ed) => ed.source === edge.source && ed.target === edge.target
@@ -116,7 +133,9 @@ export function CustomHandle(props: Props) {
             (ed) => ed.source === edge.target && ed.target === edge.source
           ).length > 0;
 
-        return !existingEdgeWayTo && !existingEdgeWayBack;
+        const selfTargeted = edge.source === edge.target;
+
+        return !existingEdgeWayTo && !existingEdgeWayBack && !selfTargeted;
       }
 
       return true;
@@ -131,7 +150,6 @@ export function CustomHandle(props: Props) {
       position={props.position}
       visible={visible}
       active={active ? "visible" : "hidden"}
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       isValidConnection={isValidConnection}
     />
   );

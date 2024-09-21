@@ -1,12 +1,15 @@
 import { NodeProps } from "@xyflow/react";
 
 import { WAStartNodeType } from "../../types";
-import { RectangleShape } from "../../../shapes/rectangle";
+import { RectangleShape } from "../../../shapes/rectangle/node";
 import waTheming from "../../wa.theming";
-import { fonts, textFont } from "../../../shapes/fonts";
+import { fonts, textFont } from "../../../shapes/default.theming";
 import { waPlainTextParams } from "../wa-plain-text.params";
 
-export function WAPlainTextNode({ data }: NodeProps<WAStartNodeType>) {
+export function WAPlainTextNode({
+  data,
+  selected,
+}: NodeProps<WAStartNodeType>) {
   return (
     <RectangleShape
       shape={{
@@ -17,6 +20,7 @@ export function WAPlainTextNode({ data }: NodeProps<WAStartNodeType>) {
         title: waPlainTextParams.title,
         providerIcon: waPlainTextParams.providerIcon,
         familyIcon: waPlainTextParams.familyIcon,
+        selected,
       }}
       children={{
         content: (

@@ -1,5 +1,5 @@
 import { NodeType } from "../../..";
-import { DndRectangleContainer } from "../../../shapes/rectangle/dnd/rectangle.dnd";
+import { DndRectangleContainer } from "../../../shapes/rectangle/dnd";
 import { DnDProps } from "../../../types";
 import waTheming from "../../wa.theming";
 import { waPlainTextParams } from "../wa-plain-text.params";

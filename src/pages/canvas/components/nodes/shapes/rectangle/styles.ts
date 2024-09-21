@@ -1,13 +1,14 @@
 import styled from "styled-components";
-import { getTitleFonts } from "../fonts";
 
-type ContainerProps = {
+import { getTitleFonts } from "../default.theming";
+
+interface ContainerProps {
   background: string;
-};
+}
 
-type MainProps = {
+interface MainProps {
   border: string;
-};
+}
 
 export const Container = styled.div<ContainerProps>`
   position: relative;

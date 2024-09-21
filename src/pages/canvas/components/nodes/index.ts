@@ -1,6 +1,6 @@
 import type { NodeTypes } from "@xyflow/react";
 
-import { WAStartNode } from "./wa/start";
+import { WAStartNode } from "./wa/start/node";
 import { WAPlainTextNode } from "./wa/plain-text/node";
 
 export enum NodeType {

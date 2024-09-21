@@ -1,16 +1,16 @@
 import styled from "styled-components";
-import { getTitleFonts } from "../../fonts";
+import { getTitleFonts } from "../../default.theming";
 
-type ContainerProps = {
+interface ContainerProps {
   background: string;
-};
+}
 
-export const DndRectangleContainer = styled.div<ContainerProps>`
+export const DndRoundedContainer = styled.div<ContainerProps>`
   display: flex;
   flex-direction: row;
-  align-content: center;
   justify-content: flex-start;
 
+  width: 50%;
   height: 20px;
   padding: 4px 4px 4px 14px;
   margin-bottom: 10px;
@@ -18,7 +18,7 @@ export const DndRectangleContainer = styled.div<ContainerProps>`
   cursor: grab;
 
   border: 2px solid transparent;
-  border-radius: 3px;
+  border-radius: 100px;
   background: ${(props) => props.background};
 
   ${getTitleFonts()}
