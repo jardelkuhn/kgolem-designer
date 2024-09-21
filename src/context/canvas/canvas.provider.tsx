@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   addEdge,
   ColorMode,
@@ -7,9 +7,9 @@ import {
   OnConnect,
   OnConnectStartParams,
   ReactFlow,
-  ReactFlowProvider,
   useEdgesState,
   useNodesState,
+  useReactFlow,
 } from "@xyflow/react";
 
 import HandleFactory from "./handle.factory";
@@ -17,6 +17,9 @@ import { DefaultProviderProps } from "../types";
 import { nodeTypes } from "../../pages/canvas/components/nodes";
 import { edgeTypes } from "../../pages/canvas/components/edges";
 import { AppNode } from "../../pages/canvas/components/nodes/types";
+import { useDnD } from "../dnd/dnd.provider";
+import { Container, ReactFlowWrapper } from "./styles";
+import { WhatsAppSidebar } from "../../pages/canvas/components/sidebars/whatsapp";
 
 interface CanvasContextProps {
   nodeEntered?: AppNode;
@@ -41,11 +44,19 @@ const initialNodes: AppNode[] = [
   },
 ];
 
+let id = 0;
+const getId = () => `dndnode_${id++}`;
+
 export function CanvasProvider(props: DefaultProviderProps) {
+  const reactFlowWrapper = useRef(null);
+
   const [colorMode] = useState<ColorMode>("dark");
 
   const [nodes, setNodes, onNodesChange] = useNodesState<AppNode>([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([]);
+
+  const { screenToFlowPosition } = useReactFlow();
+  const { type } = useDnD();
 
   const onConnect: OnConnect = useCallback(
     (connection) => {
@@ -73,12 +84,47 @@ export function CanvasProvider(props: DefaultProviderProps) {
     setConnectStartParams(undefined);
   };
 
+  const onDragOver = useCallback((event: unknown) => {
+    event.preventDefault();
+    event.dataTransfer.dropEffect = "move";
+  }, []);
+
+  const onDrop = useCallback(
+    (event) => {
+      event.preventDefault();
+
+      // check if the dropped element is valid
+      if (!type) {
+        return;
+      }
+
+      const position = screenToFlowPosition({
+        x: event.clientX,
+        y: event.clientY,
+      });
+
+      const handleFactory = new HandleFactory();
+      const uuid = getId();
+      const handles = handleFactory.createEmptyHandlesForNode(uuid);
+
+      const newNode = {
+        id: uuid,
+        type,
+        position,
+        data: { label: `${type} node`, handles },
+      };
+
+      setNodes((nds) => nds.concat(newNode));
+    },
+    [screenToFlowPosition, setNodes, type]
+  );
+
   useEffect(() => {
     const handleFactory = new HandleFactory();
 
     setNodes(() => {
       return initialNodes.map((node) => {
-        const handles = handleFactory.createEmptyHandlesForNode(node);
+        const handles = handleFactory.createEmptyHandlesForNode(node.id);
         return {
           ...node,
           data: {
@@ -100,26 +146,31 @@ export function CanvasProvider(props: DefaultProviderProps) {
         edges,
       }}
     >
-      <ReactFlowProvider>
-        <ReactFlow
-          nodes={nodes}
-          edges={edges}
-          nodeTypes={nodeTypes}
-          edgeTypes={edgeTypes}
-          elementsSelectable={true}
-          onNodesChange={onNodesChange}
-          onEdgesChange={onEdgesChange}
-          onNodeMouseEnter={onNodeMouseEnter}
-          onNodeMouseLeave={onNodeMouseLeave}
-          onConnectStart={onConnectStart}
-          onConnectEnd={onConnectEnd}
-          onConnect={onConnect}
-          colorMode={colorMode}
-          fitView
-        >
-          {props.children}
-        </ReactFlow>
-      </ReactFlowProvider>
+      <Container>
+        <ReactFlowWrapper ref={reactFlowWrapper}>
+          <ReactFlow
+            nodes={nodes}
+            edges={edges}
+            nodeTypes={nodeTypes}
+            edgeTypes={edgeTypes}
+            elementsSelectable={true}
+            onNodesChange={onNodesChange}
+            onEdgesChange={onEdgesChange}
+            onNodeMouseEnter={onNodeMouseEnter}
+            onNodeMouseLeave={onNodeMouseLeave}
+            onConnectStart={onConnectStart}
+            onConnectEnd={onConnectEnd}
+            onConnect={onConnect}
+            colorMode={colorMode}
+            onDrop={onDrop}
+            onDragOver={onDragOver}
+            fitView
+          >
+            {props.children}
+          </ReactFlow>
+        </ReactFlowWrapper>
+        <WhatsAppSidebar />
+      </Container>
     </CanvasContext.Provider>
   );
 }

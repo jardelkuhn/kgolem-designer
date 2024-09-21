@@ -1,5 +1,4 @@
 import { HandleType, Position } from "@xyflow/react";
-import { AppNode } from "../../pages/canvas/components/nodes/types";
 import { ReactElement } from "react";
 import { CustomHandle } from "../../pages/canvas/components/handles";
 
@@ -10,47 +9,17 @@ class HandleFactory {
   //   this.edgeList = edgeList;
   // }
 
-  createEmptyHandlesForNode(node: AppNode): ReactElement[] {
+  createEmptyHandlesForNode(uuid: string): ReactElement[] {
     return [
-      this.createHandle(
-        `${node.id}-a-source`,
-        node.id,
-        "source",
-        Position.Right
-      ),
-      this.createHandle(
-        `${node.id}-b-source`,
-        node.id,
-        "source",
-        Position.Left
-      ),
-      this.createHandle(`${node.id}-c-source`, node.id, "source", Position.Top),
-      this.createHandle(
-        `${node.id}-d-source`,
-        node.id,
-        "source",
-        Position.Bottom
-      ),
+      this.createHandle(`${uuid}-a-source`, uuid, "source", Position.Right),
+      this.createHandle(`${uuid}-b-source`, uuid, "source", Position.Left),
+      this.createHandle(`${uuid}-c-source`, uuid, "source", Position.Top),
+      this.createHandle(`${uuid}-d-source`, uuid, "source", Position.Bottom),
 
-      this.createHandle(
-        `${node.id}-a-target`,
-        node.id,
-        "target",
-        Position.Right
-      ),
-      this.createHandle(
-        `${node.id}-b-target`,
-        node.id,
-        "target",
-        Position.Left
-      ),
-      this.createHandle(`${node.id}-c-target`, node.id, "target", Position.Top),
-      this.createHandle(
-        `${node.id}-d-target`,
-        node.id,
-        "target",
-        Position.Bottom
-      ),
+      this.createHandle(`${uuid}-a-target`, uuid, "target", Position.Right),
+      this.createHandle(`${uuid}-b-target`, uuid, "target", Position.Left),
+      this.createHandle(`${uuid}-c-target`, uuid, "target", Position.Top),
+      this.createHandle(`${uuid}-d-target`, uuid, "target", Position.Bottom),
     ];
   }
 

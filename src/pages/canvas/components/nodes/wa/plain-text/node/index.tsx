@@ -1,9 +1,10 @@
 import { NodeProps } from "@xyflow/react";
 
-import { WAStartNodeType } from "../types";
-import { RectangleShape } from "../../shapes/rectangle";
-import waTheming from "../wa.theming";
-import { fonts, textFont } from "../../shapes/fonts";
+import { WAStartNodeType } from "../../types";
+import { RectangleShape } from "../../../shapes/rectangle";
+import waTheming from "../../wa.theming";
+import { fonts, textFont } from "../../../shapes/fonts";
+import { waPlainTextParams } from "../wa-plain-text.params";
 
 export function WAPlainTextNode({ data }: NodeProps<WAStartNodeType>) {
   return (
@@ -13,9 +14,9 @@ export function WAPlainTextNode({ data }: NodeProps<WAStartNodeType>) {
         background: waTheming.background,
       }}
       options={{
-        title: "Enviar texto",
-        providerIcon: "bi bi-whatsapp",
-        familyIcon: "bi bi-body-text",
+        title: waPlainTextParams.title,
+        providerIcon: waPlainTextParams.providerIcon,
+        familyIcon: waPlainTextParams.familyIcon,
       }}
       children={{
         content: (
