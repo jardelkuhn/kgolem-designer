@@ -1,21 +1,11 @@
-![](https://github.com/xyflow/web/blob/main/assets/codesandbox-header-ts.png?raw=true)
-![](https://github.com/jackanakin/jackchat-canvas/blob/main/history/components/21092024.png?raw=true)
+![](https://github.com/jackanakin/jackchat-canvas/blob/main/react-flow-header.png?raw=true)
+![](https://github.com/jackanakin/jackchat-canvas/blob/main/history/components/21092024_2.png?raw=true)
 
-# React Flow Canvas Demo (Vite + TS)
+# K-Golem Flow Demo (Vite + TS)
 [![Node.js CI](https://github.com/jackanakin/jackchat-canvas/actions/workflows/node.js.yml/badge.svg)](https://github.com/jackanakin/jackchat-canvas/actions/workflows/node.js.yml)
-- [Live Demo - gh-pages](https://jackanakin.github.io/jackchat-canvas)
+[Live Demo](https://jackanakin.github.io/jackchat-canvas)
 
 ## Getting up and running
-
-You can get this template without forking/cloning the repo using `degit`:
-
-```bash
-npx degit xyflow/vite-react-flow-template your-app-name
-```
-
-The template contains mostly the minimum dependencies to get up and running, but
-also includes eslint and some additional rules to help you write React code that
-is less likely to run into issues:
 
 ```bash
 npm install # or `pnpm install` or `yarn install`
@@ -31,11 +21,31 @@ npm run dev
 While the development server is running, changes you make to the code will be
 automatically reflected in the browser!
 
-## Things to try:
+<details>
+  <summary><strong>Sketches</strong></summary>
 
-- Create a new custom node inside `src/nodes/` (don't forget to export it from `src/nodes/index.ts`).
-- Change how things look by [overriding some of the built-in classes](https://reactflow.dev/learn/customization/theming#overriding-built-in-classes).
-- Add a layouting library to [position your nodes automatically](https://reactflow.dev/learn/layouting/layouting)
+  
+</details>
+
+<details>
+  <summary><strong>History</strong> evolution</summary>
+  
+</details>
+
+<details>
+  <summary><strong>Components</strong></summary>
+  
+</details>
+
+## Credits | The xyflow team (09/2024)
+
+React Flow and Svelte Flow are maintained by the team behind [xyflow](https://xyflow.com). If you need help or want to talk to us about a collaboration, reach out through our [contact form](https://xyflow.com/contact) or by joining our [Discord Server](https://discord.gg/Bqt6xrs).
+
+- Christopher • [Twitter](https://twitter.com/chrtze) • [Github](https://github.com/chrtze)
+- Hayleigh • [Twitter](https://twitter.com/hayleighdotdev) • [Github](https://github.com/hayleigh-dot-dev)
+- John • [Website](https://johnrobbdesign.com/) • [Mastodon](https://mastodon.social/@johnrobbjr)
+- Moritz • [Twitter](https://twitter.com/moklick) • [Github](https://github.com/moklick)
+- Peter • [Github](https://github.com/peterkogo)
 
 ## Resources
 
