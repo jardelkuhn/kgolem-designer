@@ -84,13 +84,14 @@ export function CanvasProvider(props: DefaultProviderProps) {
     setConnectStartParams(undefined);
   };
 
-  const onDragOver = useCallback((event: unknown) => {
+  const onDragOver = useCallback((event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
     event.dataTransfer.dropEffect = "move";
   }, []);
 
   const onDrop = useCallback(
-    (event) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (event: React.DragEvent<HTMLDivElement>) => {
       event.preventDefault();
 
       // check if the dropped element is valid
