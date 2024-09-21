@@ -18,7 +18,6 @@ export interface RoundedOptionProps {
 }
 
 export interface RoundedChildrenProps {
-  uuid: string;
   content: ReactElement;
   handles: ReactElement[];
 }

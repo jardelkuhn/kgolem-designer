@@ -103,6 +103,27 @@ export function CustomHandle(props: Props) {
     return (edge as Connection).source !== undefined;
   }
 
+  const isValidConnection = useCallback(
+    (edge: unknown) => {
+      if (isConnection(edge)) {
+        const existingEdgeWayTo =
+          edges.filter(
+            (ed) => ed.source === edge.source && ed.target === edge.target
+          ).length > 0;
+
+        const existingEdgeWayBack =
+          edges.filter(
+            (ed) => ed.source === edge.target && ed.target === edge.source
+          ).length > 0;
+
+        return !existingEdgeWayTo && !existingEdgeWayBack;
+      }
+
+      return true;
+    },
+    [edges]
+  );
+
   return (
     <Container
       id={props.id}
@@ -111,15 +132,7 @@ export function CustomHandle(props: Props) {
       visible={visible}
       active={active ? "visible" : "hidden"}
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      isValidConnection={(edge: unknown) => {
-        if (isConnection(edge)) {
-          return edge.source !== edge.target;
-        }
-
-        return true;
-      }}
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      // onConnect={(connection: Connection) => console.log(connection)}
+      isValidConnection={isValidConnection}
     />
   );
 }

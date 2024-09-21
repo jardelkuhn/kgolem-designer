@@ -24,7 +24,6 @@ export function WAStartNode({ data }: NodeProps<WAStartNodeType>) {
           </span>
         ),
         handles: data.handles,
-        uuid: data.uuid,
       }}
     />
   );

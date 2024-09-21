@@ -18,7 +18,6 @@ export interface RectangleOptionProps {
 }
 
 export interface RectangleChildrenProps {
-  uuid: string;
   content: ReactElement;
   handles: ReactElement[];
 }

@@ -1,14 +1,14 @@
-import { Edge, HandleType, Position } from "@xyflow/react";
+import { HandleType, Position } from "@xyflow/react";
 import { AppNode } from "../../pages/canvas/components/nodes/types";
 import { ReactElement } from "react";
 import { CustomHandle } from "../../pages/canvas/components/handles";
 
 class HandleFactory {
-  private edgeList: Edge[];
+  // private edgeList: Edge[] | undefined;
 
-  constructor(edgeList: Edge[]) {
-    this.edgeList = edgeList;
-  }
+  // constructor(edgeList: Edge[]) {
+  //   this.edgeList = edgeList;
+  // }
 
   createEmptyHandlesForNode(node: AppNode): ReactElement[] {
     return [
