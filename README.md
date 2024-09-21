@@ -1,8 +1,8 @@
 ![](https://github.com/xyflow/web/blob/main/assets/codesandbox-header-ts.png?raw=true)
 
 # React Flow Canvas Demo (Vite + TS)
+[![Node.js CI](https://github.com/jackanakin/jackchat-canvas/actions/workflows/node.js.yml/badge.svg)](https://github.com/jackanakin/jackchat-canvas/actions/workflows/node.js.yml)
 - [Live Demo - gh-pages](https://jackanakin.github.io/jackchat-canvas)
-
 
 **TypeScript not your thing?** We also have a vanilla JavaScript starter template,
 just for you!
