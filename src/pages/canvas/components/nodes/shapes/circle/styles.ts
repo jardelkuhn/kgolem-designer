@@ -1,20 +1,18 @@
 import styled from "styled-components";
-import { getDescriptionFonts, getTitleFonts } from "../styling/default.theming";
 
-interface ContainerProps {
-  background: string;
+import { getDescriptionFonts, getTitleFonts } from "../../_utilities/colors";
+import { ColorProps } from "../../@interfaces";
+
+interface Props {
+  color: ColorProps;
 }
 
-interface MiddleProps {
-  border: string;
-}
-
-export const Container = styled.div<ContainerProps>`
+export const Container = styled.div<Props>`
   position: relative;
   width: 75px;
   height: 75px;
   border: 2px solid transparent;
-  background: ${(props) => props.background};
+  background: ${(props) => props.color.background};
   border-radius: 50%;
   display: flex;
   flex-direction: column;
@@ -32,7 +30,7 @@ export const TopWrapper = styled.div`
   border-top-right-radius: 75px;
 `;
 
-export const MiddleWrapper = styled.div<MiddleProps>`
+export const MiddleWrapper = styled.div<Props>`
   display: flex;
   justify-content: center;
   width: 90%;
@@ -48,7 +46,7 @@ export const MiddleWrapper = styled.div<MiddleProps>`
     left: 0;
     right: 0;
     height: 2px; /* Height of the top border */
-    background: ${(props) => props.border};
+    background: ${(props) => props.color.border};
     border-radius: 3px 3px 0 0; /* Match the corners */
     z-index: 1; /* Ensure it appears above the background */
   }

@@ -1,17 +1,17 @@
 import { NodeType } from "../../..";
+import { waColors } from "../../../_utilities/colors";
+import { waPlainTextParams } from "../../../_utilities/params";
 import { DndRectangleContainer } from "../../../shapes/rectangle/dnd";
 import { DnDProps } from "../../../types";
-import waTheming from "../../wa.theming";
-import { waPlainTextParams } from "../wa-plain-text.params";
 
 export function WAPlainTextDnD({ onDragStart }: DnDProps) {
   return (
     <DndRectangleContainer
-      background={waTheming.background}
+      background={waColors.color.normal.background}
       onDragStart={(event) => onDragStart(event, NodeType.WAPlainText)}
       draggable
     >
-      <i className={waPlainTextParams.familyIcon}></i> 
+      <i className={waPlainTextParams.familyIcon}></i>
       {waPlainTextParams.title}
     </DndRectangleContainer>
   );

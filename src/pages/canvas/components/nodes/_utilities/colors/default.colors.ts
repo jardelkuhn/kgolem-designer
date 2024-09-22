@@ -1,9 +1,19 @@
-import { Theming } from "../@types/theming.types";
+import { NodeColor, NodeColors } from "../../@interfaces";
 
-export const selectionStyle: Theming = {
-  border: `linear-gradient(45deg, orange, yellow)`,
-  background: `linear-gradient(135deg, #FFFFFF, #C0C0C0) padding-box, linear-gradient(45deg, orange, yellow) border-box;`,
+export const defaultNodeColors: NodeColors = {
+  normal: {
+    border: "green",
+    background: "red",
+  },
+  selected: {
+    border: `linear-gradient(45deg, orange, yellow)`,
+    background: `linear-gradient(135deg, #FFFFFF, #C0C0C0) padding-box, linear-gradient(45deg, orange, yellow) border-box;`,
+  },
 };
+
+export const defaultColors: NodeColor = new NodeColor(defaultNodeColors);
+
+export default defaultColors;
 
 export const fonts = {
   color: "#212121",

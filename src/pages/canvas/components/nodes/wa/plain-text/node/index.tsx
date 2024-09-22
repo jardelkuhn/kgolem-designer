@@ -1,46 +1,26 @@
 import { NodeProps } from "@xyflow/react";
 
-import { WAStartNodeType } from "../../types";
-import { RectangleShape } from "../../../shapes/rectangle/node";
-import waTheming from "../../wa.theming";
-import { fonts, textFont } from "../../../shapes/styling/default.theming";
-import { waPlainTextParams } from "../wa-plain-text.params";
 import {
   RectangleContentContainer,
   RectangleContentDescription,
   RectangleContentLabelWrapper,
 } from "../../../shapes/rectangle/styles";
+import withRectangleShape from "../../../shapes/rectangle/node";
+import { fonts, textFont } from "../../../_utilities/colors";
+import { WAPlainTextNodeType } from "../../types";
 
-export function WAPlainTextNode({
-  data,
-  selected,
-}: NodeProps<WAStartNodeType>) {
+function PlainTextNode({ data }: NodeProps<WAPlainTextNodeType>) {
   return (
-    <RectangleShape
-      shape={{
-        border: waTheming.border,
-        background: waTheming.background,
-      }}
-      properties={{
-        title: waPlainTextParams.title,
-        providerIcon: waPlainTextParams.providerIcon,
-        familyIcon: waPlainTextParams.familyIcon,
-        selected,
-      }}
-      children={{
-        content: (
-          <RectangleContentContainer>
-            <RectangleContentLabelWrapper>
-              <RectangleContentDescription
-                style={{ ...fonts, fontSize: textFont.description }}
-              >
-                {data.label}
-              </RectangleContentDescription>
-            </RectangleContentLabelWrapper>
-          </RectangleContentContainer>
-        ),
-        handles: data.handles,
-      }}
-    />
+    <RectangleContentContainer>
+      <RectangleContentLabelWrapper>
+        <RectangleContentDescription
+          style={{ ...fonts, fontSize: textFont.description }}
+        >
+          {data.label}
+        </RectangleContentDescription>
+      </RectangleContentLabelWrapper>
+    </RectangleContentContainer>
   );
 }
+
+export const WAPlainTextNode = withRectangleShape(PlainTextNode);

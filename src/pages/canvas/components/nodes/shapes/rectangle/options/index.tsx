@@ -1,22 +1,21 @@
 import { Position } from "@xyflow/react";
 
-import { ShapeOption } from "../../@types/shape.props";
 import { OptionContainer, OptionLabel } from "../styles";
-import { Theming } from "../../@types/theming.types";
 import { CustomHandle } from "../../../../handles/custom";
+import { ColorProps, NodeOption } from "../../../@interfaces";
 
 interface Props {
   nodeId: string;
-  theming: Theming;
-  option: ShapeOption;
+  color: ColorProps;
+  option: NodeOption;
   top: number;
 }
 
 export function RectangleOption(props: Props) {
-  const { nodeId, option, theming, top } = props;
+  const { nodeId, option, color, top } = props;
 
   return (
-    <OptionContainer background={theming.background}>
+    <OptionContainer color={color}>
       <OptionLabel>{option.label}</OptionLabel>
       <CustomHandle
         id={option.id}

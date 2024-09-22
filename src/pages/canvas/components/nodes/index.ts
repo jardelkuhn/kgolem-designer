@@ -1,8 +1,8 @@
 import type { NodeTypes } from "@xyflow/react";
 
 import { WAStartNode } from "./wa/start/node";
-import { WAPlainTextNode } from "./wa/plain-text/node";
 import { WAOptionsNode } from "./wa/options/node";
+import { WAPlainTextNode } from "./wa/plain-text/node";
 
 export enum NodeType {
   WAStart = "WAStart",
@@ -10,8 +10,10 @@ export enum NodeType {
   WAPlainText = "WAPlainText",
 }
 
-export const nodeTypes = {
+export const nodeTypes: CustomNodeTypes = {
   WAStart: WAStartNode,
   WAOptions: WAOptionsNode,
   WAPlainText: WAPlainTextNode,
-} satisfies NodeTypes;
+};
+
+export type CustomNodeTypes = NodeTypes & object;

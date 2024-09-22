@@ -11,9 +11,8 @@ import {
   useReactFlow,
 } from "@xyflow/react";
 
-import HandleFactory from "../../utilities/handle.factory";
 import { DefaultProviderProps } from "../types";
-import { NodeType, nodeTypes } from "../../pages/canvas/components/nodes";
+import { nodeTypes } from "../../pages/canvas/components/nodes";
 import { EdgeType, edgeTypes } from "../../pages/canvas/components/edges";
 import { AppNode } from "../../pages/canvas/components/nodes/types";
 import { useDnD } from "../dnd/dnd.provider";
@@ -24,6 +23,8 @@ interface CanvasContextProps {
   nodeEntered?: AppNode;
   connectStartParams?: OnConnectStartParams;
   edges: Edge[];
+
+  getHandles: () => JSX.Element[];
 }
 
 const CanvasContext = React.createContext<CanvasContextProps>(null!);
@@ -33,13 +34,13 @@ const initialNodes: AppNode[] = [
     id: "e",
     type: "WAStart",
     position: { x: 0, y: 250 },
-    data: { label: "wa-start", handles: [] },
+    data: { label: "wa-start" },
   },
   {
     id: "f",
     type: "WAPlainText",
     position: { x: 100, y: 250 },
-    data: { label: "wa-plaintext", handles: [] },
+    data: { label: "wa-plaintext" },
   },
   {
     id: "g",
@@ -47,7 +48,6 @@ const initialNodes: AppNode[] = [
     position: { x: 100, y: 50 },
     data: {
       label: "wa-options",
-      handles: [],
       options: [
         { id: "1", label: "Option 1" },
         { id: "2", label: "Option 2" },
@@ -61,16 +61,19 @@ const initialNodes: AppNode[] = [
 
 let id = 0;
 const getId = () => `dndnode_${id++}`;
+const flowKey = "example-flow";
 
 export function CanvasProvider(props: DefaultProviderProps) {
   const reactFlowWrapper = useRef(null);
+  // const handleFactory = useMemo(() => new HandleFactory(), []);
 
   const [colorMode] = useState<ColorMode>("dark");
+  const [rfInstance, setRfInstance] = useState<object>();
 
   const [nodes, setNodes, onNodesChange] = useNodesState<AppNode>([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([]);
 
-  const { screenToFlowPosition } = useReactFlow();
+  const { setViewport, screenToFlowPosition } = useReactFlow();
   const { type } = useDnD();
 
   const onConnect: OnConnect = useCallback(
@@ -123,15 +126,13 @@ export function CanvasProvider(props: DefaultProviderProps) {
         y: event.clientY,
       });
 
-      const handleFactory = new HandleFactory();
       const uuid = getId();
-      const handles = handleFactory.createHandles(uuid, type);
 
       const newNode = {
         id: uuid,
         type,
         position,
-        data: { label: `${type} node`, handles },
+        data: { label: `${type} node` },
       };
 
       setNodes((nds) => nds.concat(newNode));
@@ -139,21 +140,51 @@ export function CanvasProvider(props: DefaultProviderProps) {
     [screenToFlowPosition, setNodes, type]
   );
 
-  useEffect(() => {
-    const handleFactory = new HandleFactory();
+  const onSave = useCallback(() => {
+    console.log("saving");
+    if (rfInstance) {
+      const flow = rfInstance.toObject();
 
+      // const sanitizedFlows =
+      // passar os handles de outra forma
+
+      localStorage.setItem(flowKey, JSON.stringify(flow));
+    }
+  }, [rfInstance]);
+
+  const onRestore = useCallback(() => {
+    const restoreFlow = async () => {
+      console.log("restoring");
+
+      const flow = JSON.parse(localStorage.getItem(flowKey));
+
+      console.log(flow);
+
+      if (flow) {
+        const { x = 0, y = 0, zoom = 1 } = flow.viewport;
+        setNodes(flow.nodes || []);
+        setEdges(flow.edges || []);
+        setViewport({ x, y, zoom });
+      }
+    };
+
+    restoreFlow();
+  }, [setEdges, setNodes, setViewport]);
+
+  const getHandles = useCallback((): JSX.Element[] => {
+    // handleFactory.createHandles()
+
+    return [];
+  }, []);
+
+  useEffect(() => {
     setNodes(() => {
       return initialNodes.map((node) => {
-        const handles = handleFactory.createHandles(
-          node.id,
-          node.type as NodeType
-        );
         return {
           ...node,
           data: {
             uuid: "",
             ...node.data,
-            handles,
           },
         };
       });
@@ -166,12 +197,14 @@ export function CanvasProvider(props: DefaultProviderProps) {
         nodeEntered,
         connectStartParams,
         edges,
+        getHandles,
       }}
     >
       <Container>
         <ReactFlowWrapper ref={reactFlowWrapper}>
           <ReactFlow
             fitView
+            onInit={setRfInstance}
             elementsSelectable
             deleteKeyCode="Delete"
             nodes={nodes}
@@ -192,7 +225,7 @@ export function CanvasProvider(props: DefaultProviderProps) {
             {props.children}
           </ReactFlow>
         </ReactFlowWrapper>
-        <WhatsAppSidebar />
+        <WhatsAppSidebar onSave={onSave} onRestore={onRestore} />
       </Container>
     </CanvasContext.Provider>
   );

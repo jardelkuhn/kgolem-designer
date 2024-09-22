@@ -1,23 +1,20 @@
 import styled from "styled-components";
 
-import { getDescriptionFonts, getTitleFonts } from "../styling/default.theming";
+import { getTitleFonts, getDescriptionFonts } from "../../_utilities/colors";
+import { ColorProps } from "../../@interfaces";
 
-interface ContainerProps {
-  background: string;
+interface Props {
+  color: ColorProps;
 }
 
-interface WrapperProps {
-  border: string;
-}
-
-export const Container = styled.div<ContainerProps>`
+export const Container = styled.div<Props>`
   position: relative;
   width: 100px;
   min-height: 75px;
   height: auto;
 
   border: 2px solid transparent; /* Make the border initially transparent */
-  background: ${(props) => props.background};
+  background: ${(props) => props.color.background};
 
   display: flex;
   flex-direction: column;
@@ -32,7 +29,7 @@ export const TopWrapper = styled.div`
   display: flex;
   justify-content: center;
 `;
-export const IconWrapper = styled.div<WrapperProps>`
+export const IconWrapper = styled.div<Props>`
   height: 17px;
   width: 20%;
   display: flex;
@@ -50,7 +47,7 @@ export const IconWrapper = styled.div<WrapperProps>`
     right: 0; /* Align to the right */
     width: 2px; /* Width of the right border */
     height: 110%; /* Full height of the wrapper */
-    background: ${(props) => props.border};
+    background: ${(props) => props.color.border};
     border-radius: 0 3px 3px 0; /* Match the corners */
     z-index: 1; /* Ensure it appears above the background */
   }
@@ -63,7 +60,7 @@ export const LabelWrapper = styled.div`
   justify-content: center;
 `;
 
-export const MainWrapper = styled.div<WrapperProps>`
+export const MainWrapper = styled.div<Props>`
   width: 100%;
   height: auto;
   display: flex;
@@ -81,7 +78,7 @@ export const MainWrapper = styled.div<WrapperProps>`
     left: 0;
     right: 0;
     height: 2px; /* Height of the top border */
-    background: ${(props) => props.border};
+    background: ${(props) => props.color.border};
     border-radius: 3px 3px 0 0; /* Match the corners */
     z-index: 1; /* Ensure it appears above the background */
   }
@@ -138,13 +135,13 @@ export const RectangleContentDescription = styled.span`
   ${getDescriptionFonts()};
 `;
 
-export const OptionContainer = styled.div<ContainerProps>`
+export const OptionContainer = styled.div<Props>`
   display: flex;
   align-items: center;
   width: 100%;
   height: 15px;
   border-top: 2px solid transparent; /* Make the border initially transparent */
-  background: ${(props) => props.background};
+  background: ${(props) => props.color.background};
 `;
 
 export const OptionLabel = styled.span`

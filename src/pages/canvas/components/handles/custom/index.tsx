@@ -4,7 +4,7 @@ import { HandleType, Position } from "@xyflow/react";
 import { Container } from "./styles";
 import { useCanvas } from "../../../../../context/canvas/canvas.provider";
 import { Visibility } from "./types";
-import { edgeIsConnection } from "../../../../../utilities/edge.utilities";
+import { edgeIsConnection } from "../../../../../context/canvas/utilities/edge.utilities";
 
 interface Props {
   id?: string;

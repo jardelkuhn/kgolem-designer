@@ -1,32 +1,15 @@
 import { NodeProps } from "@xyflow/react";
 
 import { WAStartNodeType } from "../../types";
-import { RoundedShape } from "../../../shapes/rounded/node";
-import waColors from "../../wa.theming";
-import { fonts, textFont } from "../../../shapes/styling/default.theming";
-import { waStartParams } from "../wa-start.params";
+import { fonts, textFont } from "../../../_utilities/colors";
+import withCircleShape from "../../../shapes/circle/node";
 
-export function WAStartNode({ data, selected }: NodeProps<WAStartNodeType>) {
+function StartNode({ data }: NodeProps<WAStartNodeType>) {
   return (
-    <RoundedShape
-      shape={{
-        border: waColors.border,
-        background: waColors.background,
-      }}
-      properties={{
-        title: waStartParams.title,
-        providerIcon: waStartParams.providerIcon,
-        familyIcon: waStartParams.familyIcon,
-        selected,
-      }}
-      children={{
-        content: (
-          <span style={{ ...fonts, fontSize: textFont.description }}>
-            {data.label}
-          </span>
-        ),
-        handles: data.handles,
-      }}
-    />
+    <span style={{ ...fonts, fontSize: textFont.description }}>
+      {data.label}
+    </span>
   );
 }
+
+export const WAStartNode = withCircleShape(StartNode);

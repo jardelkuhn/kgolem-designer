@@ -1,5 +1,6 @@
 import styled from "styled-components";
-import { getTitleFonts } from "../../styling/default.theming";
+
+import { getTitleFonts } from "../../../_utilities/colors";
 
 interface ContainerProps {
   background: string;

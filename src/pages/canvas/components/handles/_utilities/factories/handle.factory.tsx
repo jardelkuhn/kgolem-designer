@@ -1,15 +1,16 @@
 import { ReactElement } from "react";
 import { HandleType, Position } from "@xyflow/react";
 
-import { CustomHandle } from "../pages/canvas/components/handles/custom";
-import { NodeType } from "../pages/canvas/components/nodes";
-import { isStartNode } from "../pages/canvas/components/nodes/classifications/start-node.classification";
+import { CustomHandle } from "../../custom";
+import { NodeType } from "../../../nodes";
+import { isStartNode } from "../../../nodes/_utilities/guards/wa/start-node.guard";
 
 class HandleFactory {
-  createHandles(nodeId: string, type: NodeType) {
+  static createHandles(nodeId: string, type?: string) {
     if (isStartNode(type)) {
       return this.createHandlesForStartNode(nodeId);
     }
+
     if (type === NodeType.WAOptions) {
       return this.createHandlesForOptionNode(nodeId);
     }
@@ -17,7 +18,7 @@ class HandleFactory {
     return this.createHandlesDefault(nodeId);
   }
 
-  createHandlesDefault(parentId: string): ReactElement[] {
+  private static createHandlesDefault(parentId: string): ReactElement[] {
     return [
       this.createHandle(parentId, "source", Position.Right),
       this.createHandle(parentId, "source", Position.Left),
@@ -31,7 +32,7 @@ class HandleFactory {
     ];
   }
 
-  createHandlesForOptionNode(parentId: string): ReactElement[] {
+  private static createHandlesForOptionNode(parentId: string): ReactElement[] {
     return [
       this.createHandle(parentId, "target", Position.Left),
       this.createHandle(parentId, "target", Position.Top),
@@ -39,7 +40,7 @@ class HandleFactory {
     ];
   }
 
-  createHandlesForStartNode(parentId: string): ReactElement[] {
+  private static createHandlesForStartNode(parentId: string): ReactElement[] {
     return [
       this.createHandle(parentId, "source", Position.Right),
       this.createHandle(parentId, "source", Position.Left),
@@ -48,7 +49,11 @@ class HandleFactory {
     ];
   }
 
-  createHandle(parentId: string, type: HandleType, position: Position) {
+  private static createHandle(
+    parentId: string,
+    type: HandleType,
+    position: Position
+  ) {
     const composedId = `${parentId}-${type}=${position}`;
 
     return (

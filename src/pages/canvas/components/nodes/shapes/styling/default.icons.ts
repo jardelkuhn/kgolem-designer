@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-import { iconStyle } from "./default.theming";
+import { iconStyle } from "../../_utilities/colors";
 
 export const FamilyIcon = styled.i`
   z-index: 2;

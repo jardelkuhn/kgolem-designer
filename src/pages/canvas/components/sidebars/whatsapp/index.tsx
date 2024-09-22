@@ -7,7 +7,12 @@ import { NodeType } from "../../nodes";
 import { WAStartDnD } from "../../nodes/wa/start/dnd";
 import { WAOptionsDnD } from "../../nodes/wa/options/dnd";
 
-export function WhatsAppSidebar() {
+interface Props {
+  onSave: () => void;
+  onRestore: () => void;
+}
+
+export function WhatsAppSidebar({ onSave, onRestore }: Props) {
   const { setType } = useDnD();
 
   const onDragStart = (
@@ -26,6 +31,8 @@ export function WhatsAppSidebar() {
       <WAStartDnD onDragStart={onDragStart} />
       <WAPlainTextDnD onDragStart={onDragStart} />
       <WAOptionsDnD onDragStart={onDragStart} />
+      <button onClick={onSave}>save</button>
+      <button onClick={onRestore}>restore</button>
     </Aside>
   );
 }

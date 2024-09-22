@@ -1,13 +1,13 @@
 import { NodeType } from "../../..";
-import { DndRoundedContainer } from "../../../shapes/rounded/dnd";
+import { waColors } from "../../../_utilities/colors";
+import { waStartParams } from "../../../_utilities/params";
+import { DndRoundedContainer } from "../../../shapes/circle/dnd";
 import { DnDProps } from "../../../types";
-import waTheming from "../../wa.theming";
-import { waStartParams } from "../wa-start.params";
 
 export function WAStartDnD({ onDragStart }: DnDProps) {
   return (
     <DndRoundedContainer
-      background={waTheming.background}
+      background={waColors.color.normal.background}
       onDragStart={(event) => onDragStart(event, NodeType.WAStart)}
       draggable
     >
