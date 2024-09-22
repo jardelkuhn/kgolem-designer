@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useRef, useState } from "react";
 import {
   addEdge,
   ColorMode,
@@ -6,18 +6,20 @@ import {
   OnConnect,
   OnConnectStartParams,
   ReactFlow,
+  ReactFlowInstance,
   useEdgesState,
   useNodesState,
   useReactFlow,
 } from "@xyflow/react";
 
 import { DefaultProviderProps } from "../types";
-import { nodeTypes } from "../../pages/canvas/components/nodes";
+import { NodeType, nodeTypes } from "../../pages/canvas/components/nodes";
 import { EdgeType, edgeTypes } from "../../pages/canvas/components/edges";
 import { AppNode } from "../../pages/canvas/components/nodes/types";
 import { useDnD } from "../dnd/dnd.provider";
 import { Container, ReactFlowWrapper } from "./styles";
 import { WhatsAppSidebar } from "../../pages/canvas/components/sidebars/whatsapp";
+import { WANode } from "../../pages/canvas/components/nodes/wa/types";
 
 interface CanvasContextProps {
   nodeEntered?: AppNode;
@@ -29,46 +31,15 @@ interface CanvasContextProps {
 
 const CanvasContext = React.createContext<CanvasContextProps>(null!);
 
-const initialNodes: AppNode[] = [
-  {
-    id: "e",
-    type: "WAStart",
-    position: { x: 0, y: 250 },
-    data: { label: "wa-start" },
-  },
-  {
-    id: "f",
-    type: "WAPlainText",
-    position: { x: 100, y: 250 },
-    data: { label: "wa-plaintext" },
-  },
-  {
-    id: "g",
-    type: "WAOptions",
-    position: { x: 100, y: 50 },
-    data: {
-      label: "wa-options",
-      options: [
-        { id: "1", label: "Option 1" },
-        { id: "2", label: "Option 2" },
-        { id: "3", label: "Option 3" },
-        { id: "4", label: "Option 4" },
-        { id: "5", label: "Option 5" },
-      ],
-    },
-  },
-];
-
 let id = 0;
 const getId = () => `dndnode_${id++}`;
 const flowKey = "example-flow";
 
 export function CanvasProvider(props: DefaultProviderProps) {
   const reactFlowWrapper = useRef(null);
-  // const handleFactory = useMemo(() => new HandleFactory(), []);
 
   const [colorMode] = useState<ColorMode>("dark");
-  const [rfInstance, setRfInstance] = useState<object>();
+  const [rfInstance, setRfInstance] = useState<ReactFlowInstance<AppNode>>();
 
   const [nodes, setNodes, onNodesChange] = useNodesState<AppNode>([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([]);
@@ -132,8 +103,18 @@ export function CanvasProvider(props: DefaultProviderProps) {
         id: uuid,
         type,
         position,
-        data: { label: `${type} node` },
-      };
+        data: { label: `${type} node`, options: [] },
+      } as WANode;
+
+      if (type === NodeType.WAOptions) {
+        newNode.data.options = [
+          { id: "1", label: "Option 1" },
+          { id: "2", label: "Option 2" },
+          { id: "3", label: "Option 3" },
+          { id: "4", label: "Option 4" },
+          { id: "5", label: "Option 5" },
+        ];
+      }
 
       setNodes((nds) => nds.concat(newNode));
     },
@@ -141,7 +122,6 @@ export function CanvasProvider(props: DefaultProviderProps) {
   );
 
   const onSave = useCallback(() => {
-    console.log("saving");
     if (rfInstance) {
       const flow = rfInstance.toObject();
 
@@ -152,13 +132,18 @@ export function CanvasProvider(props: DefaultProviderProps) {
     }
   }, [rfInstance]);
 
+  const onDelete = useCallback(() => {
+    localStorage.removeItem(flowKey);
+    setRfInstance(undefined);
+    setNodes([]);
+    setEdges([]);
+  }, [setEdges, setNodes]);
+
   const onRestore = useCallback(() => {
     const restoreFlow = async () => {
-      console.log("restoring");
+      const storage = localStorage.getItem(flowKey) ?? "{}";
 
-      const flow = JSON.parse(localStorage.getItem(flowKey));
-
-      console.log(flow);
+      const flow = JSON.parse(storage);
 
       if (flow) {
         const { x = 0, y = 0, zoom = 1 } = flow.viewport;
@@ -176,20 +161,6 @@ export function CanvasProvider(props: DefaultProviderProps) {
 
     return [];
   }, []);
-
-  useEffect(() => {
-    setNodes(() => {
-      return initialNodes.map((node) => {
-        return {
-          ...node,
-          data: {
-            uuid: "",
-            ...node.data,
-          },
-        };
-      });
-    });
-  }, [setEdges, setNodes]);
 
   return (
     <CanvasContext.Provider
@@ -225,7 +196,11 @@ export function CanvasProvider(props: DefaultProviderProps) {
             {props.children}
           </ReactFlow>
         </ReactFlowWrapper>
-        <WhatsAppSidebar onSave={onSave} onRestore={onRestore} />
+        <WhatsAppSidebar
+          onSave={onSave}
+          onRestore={onRestore}
+          onDelete={onDelete}
+        />
       </Container>
     </CanvasContext.Provider>
   );

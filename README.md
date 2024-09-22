@@ -1,7 +1,11 @@
-![](https://github.com/jackanakin/jackchat-canvas/blob/main/react-flow-header.png?raw=true)
-![](https://github.com/jackanakin/jackchat-canvas/blob/main/history/components/21092024_2.png?raw=true)
+<p align="center">
+  <img src="https://github.com/jackanakin/jackchat-canvas/blob/main/react-flow-header.png?raw=true" alt="React Flow Header" />
+</p>
+
+![](https://github.com/jackanakin/jackchat-canvas/blob/main/history/components/22092024_2.png?raw=true)
 
 # K-Golem Flow Demo (Vite + TS + React-Flow)
+
 [![Node.js CI](https://github.com/jackanakin/jackchat-canvas/actions/workflows/node.js.yml/badge.svg)](https://github.com/jackanakin/jackchat-canvas/actions/workflows/node.js.yml)
 
 [Live Demo](https://jackanakin.github.io/jackchat-kgolemdesigner)
@@ -25,7 +29,6 @@ automatically reflected in the browser!
 <details>
   <summary><strong>Sketches</strong></summary>
 
-  
 </details>
 
 <details>

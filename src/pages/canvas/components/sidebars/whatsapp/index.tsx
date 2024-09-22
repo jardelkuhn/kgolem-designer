@@ -10,9 +10,10 @@ import { WAOptionsDnD } from "../../nodes/wa/options/dnd";
 interface Props {
   onSave: () => void;
   onRestore: () => void;
+  onDelete: () => void;
 }
 
-export function WhatsAppSidebar({ onSave, onRestore }: Props) {
+export function WhatsAppSidebar({ onSave, onRestore, onDelete }: Props) {
   const { setType } = useDnD();
 
   const onDragStart = (
@@ -33,6 +34,7 @@ export function WhatsAppSidebar({ onSave, onRestore }: Props) {
       <WAOptionsDnD onDragStart={onDragStart} />
       <button onClick={onSave}>save</button>
       <button onClick={onRestore}>restore</button>
+      <button onClick={onDelete}>delete</button>
     </Aside>
   );
 }
