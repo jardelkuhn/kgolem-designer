@@ -4,7 +4,7 @@
 # K-Golem Flow Demo (Vite + TS + React-Flow)
 [![Node.js CI](https://github.com/jackanakin/jackchat-canvas/actions/workflows/node.js.yml/badge.svg)](https://github.com/jackanakin/jackchat-canvas/actions/workflows/node.js.yml)
 
-[Live Demo](https://jackanakin.github.io/jackchat-canvas)
+[Live Demo](https://jackanakin.github.io/jackchat-kgolemdesigner)
 
 ## Getting up and running
 
