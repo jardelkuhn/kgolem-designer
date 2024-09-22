@@ -1,6 +1,6 @@
 import { Background, Controls, MiniMap } from "@xyflow/react";
 
-import { AppProvider } from "../../context/provider";
+import { AppProvider } from "../../context";
 
 export default function CanvasPage() {
   return (

@@ -2,9 +2,9 @@ import { CSSProperties, useCallback, useEffect, useState } from "react";
 import { HandleType, Position } from "@xyflow/react";
 
 import { Container } from "./styles";
-import { useCanvas } from "../../../../../context/canvas/canvas.provider";
 import { Visibility } from "./types";
-import { edgeIsConnection } from "../../../../../context/canvas/utilities/edge.utilities";
+import { isConnection } from "../_utilities/connection.utilities";
+import { useDesigner } from "../../../../../context/designer";
 
 interface Props {
   id?: string;
@@ -15,7 +15,7 @@ interface Props {
 }
 
 export function CustomHandle(props: Props) {
-  const { nodeEntered, connectStartParams, edges } = useCanvas();
+  const { nodeEntered, connectStartParams, edges } = useDesigner();
 
   const [active, setActive] = useState(false);
   const [visible, setVisible] = useState<Visibility>("hidden");
@@ -94,27 +94,9 @@ export function CustomHandle(props: Props) {
     return result;
   }, [edges, props]);
 
-  // const checkOppositeActivity = useCallback((): boolean => {
-  //   const matches = edges.filter((edge) => {
-  //     return props.id === edge.sourceHandle && props.type === "target";
-  //   });
-
-  //   const result = matches.length > 0;
-
-  //   console.log(matches);
-  //   return result;
-  // }, [edges, props]);
-
   const checkVisibility = useCallback(() => {
     const isActive = checkActive();
     setActive(isActive);
-
-    // const hasOppositeActivity = checkOppositeActivity();
-
-    // if (hasOppositeActivity) {
-    //   setVisible("hidden");
-    //   return;
-    // }
 
     if (isActive) {
       setVisible("visible");
@@ -133,7 +115,6 @@ export function CustomHandle(props: Props) {
     checkActive,
     checkSourceTypeVisibility,
     checkTargetTypeVisibility,
-    // checkOppositeActivity,
     props.type,
   ]);
 
@@ -143,7 +124,7 @@ export function CustomHandle(props: Props) {
 
   const isValidConnection = useCallback(
     (edge: unknown) => {
-      if (edgeIsConnection(edge)) {
+      if (isConnection(edge)) {
         const existingEdgeWayTo =
           edges.filter(
             (ed) => ed.source === edge.source && ed.target === edge.target

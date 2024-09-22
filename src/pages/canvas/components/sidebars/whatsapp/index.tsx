@@ -1,11 +1,11 @@
 import React from "react";
 
-import { useDnD } from "../../../../../context/dnd/dnd.provider";
 import { Aside, Description } from "./styles";
 import { WAPlainTextDnD } from "../../nodes/wa/plain-text/dnd";
 import { NodeType } from "../../nodes";
 import { WAStartDnD } from "../../nodes/wa/start/dnd";
 import { WAOptionsDnD } from "../../nodes/wa/options/dnd";
+import { useDnD } from "../../../../../context/dnd";
 
 interface Props {
   onSave: () => void;

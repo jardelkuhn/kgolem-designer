@@ -12,16 +12,16 @@ import {
   useReactFlow,
 } from "@xyflow/react";
 
-import { DefaultProviderProps } from "../types";
 import { NodeType, nodeTypes } from "../../pages/canvas/components/nodes";
 import { EdgeType, edgeTypes } from "../../pages/canvas/components/edges";
 import { AppNode } from "../../pages/canvas/components/nodes/types";
-import { useDnD } from "../dnd/dnd.provider";
 import { Container, ReactFlowWrapper } from "./styles";
 import { WhatsAppSidebar } from "../../pages/canvas/components/sidebars/whatsapp";
 import { WANode } from "../../pages/canvas/components/nodes/wa/types";
+import { useDnD } from "../dnd";
+import { DefaultProviderProps } from "../@interfaces";
 
-interface CanvasContextProps {
+interface DesignerContextProps {
   nodeEntered?: AppNode;
   connectStartParams?: OnConnectStartParams;
   edges: Edge[];
@@ -29,13 +29,13 @@ interface CanvasContextProps {
   getHandles: () => JSX.Element[];
 }
 
-const CanvasContext = React.createContext<CanvasContextProps>(null!);
+export const DesignerContext = React.createContext<DesignerContextProps>(null!);
 
 let id = 0;
 const getId = () => `dndnode_${id++}`;
 const flowKey = "example-flow";
 
-export function CanvasProvider(props: DefaultProviderProps) {
+export function DesignerProvider(props: DefaultProviderProps) {
   const reactFlowWrapper = useRef(null);
 
   const [colorMode] = useState<ColorMode>("dark");
@@ -163,7 +163,7 @@ export function CanvasProvider(props: DefaultProviderProps) {
   }, []);
 
   return (
-    <CanvasContext.Provider
+    <DesignerContext.Provider
       value={{
         nodeEntered,
         connectStartParams,
@@ -202,10 +202,6 @@ export function CanvasProvider(props: DefaultProviderProps) {
           onDelete={onDelete}
         />
       </Container>
-    </CanvasContext.Provider>
+    </DesignerContext.Provider>
   );
-}
-
-export function useCanvas() {
-  return React.useContext(CanvasContext);
 }

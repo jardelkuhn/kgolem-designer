@@ -62,3 +62,12 @@ Learn:
 
 - [React Flow – Custom Nodes](https://reactflow.dev/learn/customization/custom-nodes)
 - [React Flow – Layouting](https://reactflow.dev/learn/layouting/layouting)
+
+### TODO
+- Persistence service [localstorage, api]
+- Export[json, png]
+- Node options CRUD
+- Node description input
+- Design name
+- HOC for DnD
+- HOC for sidebar

@@ -1,14 +1,14 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useState } from "react";
 
-import { DefaultProviderProps } from "../types";
 import { NodeType } from "../../pages/canvas/components/nodes";
+import { DefaultProviderProps } from "../@interfaces";
 
 interface DnDContextProps {
   type: NodeType | null;
   setType: (value: NodeType) => void;
 }
 
-const DnDContext = createContext<DnDContextProps>(null!);
+export const DnDContext = createContext<DnDContextProps>(null!);
 
 export function DnDProvider(props: DefaultProviderProps) {
   const [type, setType] = useState<NodeType | null>(null);
@@ -19,9 +19,3 @@ export function DnDProvider(props: DefaultProviderProps) {
     </DnDContext.Provider>
   );
 }
-
-export default DnDContext;
-
-export const useDnD = () => {
-  return useContext(DnDContext);
-};
