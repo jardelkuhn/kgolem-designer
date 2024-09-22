@@ -2,13 +2,12 @@
   <img src="https://github.com/jackanakin/jackchat-canvas/blob/main/react-flow-header.png?raw=true" alt="React Flow Header" />
 </p>
 
-![](https://github.com/jackanakin/jackchat-canvas/blob/main/history/components/22092024_2.png?raw=true)
-
 # K-Golem Flow Demo (Vite + TS + React-Flow)
-
 [![Node.js CI](https://github.com/jackanakin/jackchat-canvas/actions/workflows/node.js.yml/badge.svg)](https://github.com/jackanakin/jackchat-canvas/actions/workflows/node.js.yml)
 
 [Live Demo](https://jackanakin.github.io/jackchat-kgolemdesigner)
+
+![](https://github.com/jackanakin/jackchat-canvas/blob/main/history/components/22092024.png?raw=true)
 
 ## Getting up and running
 
