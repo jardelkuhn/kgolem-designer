@@ -3,7 +3,7 @@ import { NodeProps } from "@xyflow/react";
 import { WAStartNodeType } from "../../types";
 import { RoundedShape } from "../../../shapes/rounded/node";
 import waColors from "../../wa.theming";
-import { fonts, textFont } from "../../../shapes/default.theming";
+import { fonts, textFont } from "../../../shapes/styling/default.theming";
 import { waStartParams } from "../wa-start.params";
 
 export function WAStartNode({ data, selected }: NodeProps<WAStartNodeType>) {
@@ -13,7 +13,7 @@ export function WAStartNode({ data, selected }: NodeProps<WAStartNodeType>) {
         border: waColors.border,
         background: waColors.background,
       }}
-      options={{
+      properties={{
         title: waStartParams.title,
         providerIcon: waStartParams.providerIcon,
         familyIcon: waStartParams.familyIcon,

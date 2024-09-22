@@ -11,9 +11,9 @@ import {
   useReactFlow,
 } from "@xyflow/react";
 
-import HandleFactory from "./handle.factory";
+import HandleFactory from "../../utilities/handle.factory";
 import { DefaultProviderProps } from "../types";
-import { nodeTypes } from "../../pages/canvas/components/nodes";
+import { NodeType, nodeTypes } from "../../pages/canvas/components/nodes";
 import { EdgeType, edgeTypes } from "../../pages/canvas/components/edges";
 import { AppNode } from "../../pages/canvas/components/nodes/types";
 import { useDnD } from "../dnd/dnd.provider";
@@ -40,6 +40,22 @@ const initialNodes: AppNode[] = [
     type: "WAPlainText",
     position: { x: 100, y: 250 },
     data: { label: "wa-plaintext", handles: [] },
+  },
+  {
+    id: "g",
+    type: "WAOptions",
+    position: { x: 100, y: 50 },
+    data: {
+      label: "wa-options",
+      handles: [],
+      options: [
+        { id: "1", label: "Option 1" },
+        { id: "2", label: "Option 2" },
+        { id: "3", label: "Option 3" },
+        { id: "4", label: "Option 4" },
+        { id: "5", label: "Option 5" },
+      ],
+    },
   },
 ];
 
@@ -109,7 +125,7 @@ export function CanvasProvider(props: DefaultProviderProps) {
 
       const handleFactory = new HandleFactory();
       const uuid = getId();
-      const handles = handleFactory.createEmptyHandlesForNode(uuid);
+      const handles = handleFactory.createHandles(uuid, type);
 
       const newNode = {
         id: uuid,
@@ -128,7 +144,10 @@ export function CanvasProvider(props: DefaultProviderProps) {
 
     setNodes(() => {
       return initialNodes.map((node) => {
-        const handles = handleFactory.createEmptyHandlesForNode(node.id);
+        const handles = handleFactory.createHandles(
+          node.id,
+          node.type as NodeType
+        );
         return {
           ...node,
           data: {

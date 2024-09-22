@@ -1,6 +1,6 @@
 import { getShapeColors } from "../../../../../../../utilities/shape.utilities";
-import { FamilyIcon } from "../../icons";
-import { ShapeProps } from "../../shape.props";
+import { FamilyIcon } from "../../styling/default.icons";
+import { ShapeProps } from "../../@types/shape.props";
 import {
   Container,
   IconWrapper,
@@ -21,12 +21,12 @@ export function RectangleShape(props: ShapeProps) {
       <TopWrapper>
         <IconWrapper border={border}>
           <RectangleIconContainer>
-            <FamilyIcon className={props.options.familyIcon} />
+            <FamilyIcon className={props.properties.familyIcon} />
           </RectangleIconContainer>
         </IconWrapper>
         <LabelWrapper>
           <RectangleMainContainer>
-            <RectangleMainSpan>{props.options.title}</RectangleMainSpan>
+            <RectangleMainSpan>{props.properties.title}</RectangleMainSpan>
           </RectangleMainContainer>
         </LabelWrapper>
       </TopWrapper>
@@ -36,7 +36,7 @@ export function RectangleShape(props: ShapeProps) {
       {props.children?.handles}
 
       <ProviderCircle>
-        <FamilyIcon className={props.options.providerIcon} />
+        <FamilyIcon className={props.properties.providerIcon} />
       </ProviderCircle>
     </Container>
   );

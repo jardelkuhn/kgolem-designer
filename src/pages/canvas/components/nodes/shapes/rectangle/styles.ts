@@ -1,38 +1,38 @@
 import styled from "styled-components";
 
-import { getTitleFonts } from "../default.theming";
+import { getDescriptionFonts, getTitleFonts } from "../styling/default.theming";
 
 interface ContainerProps {
   background: string;
 }
 
-interface MainProps {
+interface WrapperProps {
   border: string;
 }
 
 export const Container = styled.div<ContainerProps>`
   position: relative;
   width: 100px;
-  height: 75px;
+  min-height: 75px;
+  height: auto;
 
   border: 2px solid transparent; /* Make the border initially transparent */
   background: ${(props) => props.background};
 
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   align-items: center;
   border-radius: 3px;
 `;
 
 export const TopWrapper = styled.div`
   width: 100%;
-  height: 20%;
+  height: 15px;
 
   display: flex;
   justify-content: center;
 `;
-export const IconWrapper = styled.div<MainProps>`
+export const IconWrapper = styled.div<WrapperProps>`
   height: 17px;
   width: 20%;
   display: flex;
@@ -63,9 +63,9 @@ export const LabelWrapper = styled.div`
   justify-content: center;
 `;
 
-export const MainWrapper = styled.div<MainProps>`
+export const MainWrapper = styled.div<WrapperProps>`
   width: 100%;
-  height: 80%;
+  height: auto;
   display: flex;
   justify-content: center;
   position: relative; /* Needed for absolute positioning of the pseudo-element */
@@ -121,4 +121,34 @@ export const ProviderCircle = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+`;
+
+export const RectangleContentContainer = styled.div`
+  width: 100%;
+`;
+
+export const RectangleContentLabelWrapper = styled.div`
+  display: flex;
+  height: 60px;
+  width: 100%;
+  padding: 2px;
+`;
+
+export const RectangleContentDescription = styled.span`
+  ${getDescriptionFonts()};
+`;
+
+export const OptionContainer = styled.div<ContainerProps>`
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 15px;
+  border-top: 2px solid transparent; /* Make the border initially transparent */
+  background: ${(props) => props.background};
+`;
+
+export const OptionLabel = styled.span`
+  width: 100%;
+  ${getTitleFonts()};
+  text-align: center;
 `;

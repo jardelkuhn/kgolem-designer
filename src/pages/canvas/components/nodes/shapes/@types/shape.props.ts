@@ -2,7 +2,7 @@ import { ReactElement } from "react";
 
 export type ShapeProps = {
   shape: ShapeStyle;
-  options: ShapeOption;
+  properties: ShapeProperties;
   children: Children;
 };
 
@@ -11,7 +11,7 @@ export interface ShapeStyle {
   border: string;
 }
 
-export interface ShapeOption {
+export interface ShapeProperties {
   title: string;
   providerIcon: string;
   familyIcon: string;
@@ -21,4 +21,10 @@ export interface ShapeOption {
 export interface Children {
   content: ReactElement;
   handles: ReactElement[];
+  options?: ShapeOption[];
+}
+
+export interface ShapeOption {
+  id: string;
+  label: string;
 }

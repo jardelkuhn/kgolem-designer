@@ -1,3 +1,10 @@
+import { Theming } from "../@types/theming.types";
+
+export const selectionStyle: Theming = {
+  border: `linear-gradient(45deg, orange, yellow)`,
+  background: `linear-gradient(135deg, #FFFFFF, #C0C0C0) padding-box, linear-gradient(45deg, orange, yellow) border-box;`,
+};
+
 export const fonts = {
   color: "#212121",
   fontWeight: 400,
@@ -6,11 +13,6 @@ export const fonts = {
 
 export const iconStyle = {
   color: "#333333",
-};
-
-export const selectionStyle = {
-  border: `linear-gradient(45deg, orange, yellow)`,
-  background: `linear-gradient(135deg, #FFFFFF, #C0C0C0) padding-box, linear-gradient(45deg, orange, yellow) border-box;`,
 };
 
 export const rectangleStyle = {

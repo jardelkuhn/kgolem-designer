@@ -1,6 +1,6 @@
 import { getShapeColors } from "../../../../../../../utilities/shape.utilities";
-import { FamilyIcon } from "../../icons";
-import { ShapeProps } from "../../shape.props";
+import { FamilyIcon } from "../../styling/default.icons";
+import { ShapeProps } from "../../@types/shape.props";
 import {
   BottomWrapper,
   Container,
@@ -20,14 +20,16 @@ export function RoundedShape(props: ShapeProps) {
     <Container background={background}>
       <TopWrapper>
         <DefaultTopContentContainer>
-          <FamilyIcon className={props.options.familyIcon} />
-          <DefaultTopContentLabel>{props.options.title}</DefaultTopContentLabel>
+          <FamilyIcon className={props.properties.familyIcon} />
+          <DefaultTopContentLabel>
+            {props.properties.title}
+          </DefaultTopContentLabel>
         </DefaultTopContentContainer>
       </TopWrapper>
 
       <MiddleWrapper border={border}>
         <RoundedMiddleContainer>
-          <RoundedMiddleLabel>{props.options.title}</RoundedMiddleLabel>
+          <RoundedMiddleLabel>{props.properties.title}</RoundedMiddleLabel>
         </RoundedMiddleContainer>
       </MiddleWrapper>
 
@@ -36,7 +38,7 @@ export function RoundedShape(props: ShapeProps) {
       {props.children?.handles}
 
       <ProviderCircle>
-        <FamilyIcon className={props.options.providerIcon} />
+        <FamilyIcon className={props.properties.providerIcon} />
       </ProviderCircle>
     </Container>
   );

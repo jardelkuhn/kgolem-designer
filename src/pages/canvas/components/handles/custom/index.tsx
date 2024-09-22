@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { CSSProperties, useCallback, useEffect, useState } from "react";
 import { HandleType, Position } from "@xyflow/react";
 
 import { Container } from "./styles";
@@ -11,6 +11,7 @@ interface Props {
   parentId: string;
   type: HandleType;
   position: Position;
+  style?: CSSProperties;
 }
 
 export function CustomHandle(props: Props) {
@@ -90,13 +91,32 @@ export function CustomHandle(props: Props) {
 
     const result = matches.length > 0;
 
-    setActive(result);
-
     return result;
   }, [edges, props]);
 
+  // const checkOppositeActivity = useCallback((): boolean => {
+  //   const matches = edges.filter((edge) => {
+  //     return props.id === edge.sourceHandle && props.type === "target";
+  //   });
+
+  //   const result = matches.length > 0;
+
+  //   console.log(matches);
+  //   return result;
+  // }, [edges, props]);
+
   const checkVisibility = useCallback(() => {
-    if (checkActive()) {
+    const isActive = checkActive();
+    setActive(isActive);
+
+    // const hasOppositeActivity = checkOppositeActivity();
+
+    // if (hasOppositeActivity) {
+    //   setVisible("hidden");
+    //   return;
+    // }
+
+    if (isActive) {
       setVisible("visible");
       return;
     }
@@ -113,6 +133,7 @@ export function CustomHandle(props: Props) {
     checkActive,
     checkSourceTypeVisibility,
     checkTargetTypeVisibility,
+    // checkOppositeActivity,
     props.type,
   ]);
 
@@ -151,6 +172,7 @@ export function CustomHandle(props: Props) {
       visible={visible}
       active={active ? "visible" : "hidden"}
       isValidConnection={isValidConnection}
+      style={props.style ? props.style : {}}
     />
   );
 }

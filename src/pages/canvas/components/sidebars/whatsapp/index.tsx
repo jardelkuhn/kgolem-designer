@@ -5,6 +5,7 @@ import { Aside, Description } from "./styles";
 import { WAPlainTextDnD } from "../../nodes/wa/plain-text/dnd";
 import { NodeType } from "../../nodes";
 import { WAStartDnD } from "../../nodes/wa/start/dnd";
+import { WAOptionsDnD } from "../../nodes/wa/options/dnd";
 
 export function WhatsAppSidebar() {
   const { setType } = useDnD();
@@ -24,6 +25,7 @@ export function WhatsAppSidebar() {
       </Description>
       <WAStartDnD onDragStart={onDragStart} />
       <WAPlainTextDnD onDragStart={onDragStart} />
+      <WAOptionsDnD onDragStart={onDragStart} />
     </Aside>
   );
 }
