@@ -2,10 +2,20 @@
   <img src="https://github.com/jackanakin/jackchat-canvas/blob/main/react-flow-header.png?raw=true" alt="React Flow Header" />
 </p>
 
-# K-Golem Flow Demo (Vite + TS + React-Flow)
-[![Node.js CI](https://github.com/jackanakin/jackchat-canvas/actions/workflows/node.js.yml/badge.svg)](https://github.com/jackanakin/jackchat-canvas/actions/workflows/node.js.yml)
+# K-Golem Designer Demo (Vite + TS + React-Flow)
 
-[Live Demo](https://jackanakin.github.io/jackchat-kgolemdesigner)
+[![Node.js CI](https://github.com/jackanakin/jackchat-canvas/actions/workflows/node.js.yml/badge.svg)](https://github.com/jackanakin/jackchat-canvas/actions/workflows/node.js.yml)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=jackanakin_kgolem-designer&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=jackanakin_kgolem-designer)
+[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=jackanakin_kgolem-designer&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=jackanakin_kgolem-designer)
+[![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=jackanakin_kgolem-designer&metric=duplicated_lines_density)](https://sonarcloud.io/summary/new_code?id=jackanakin_kgolem-designer)
+[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=jackanakin_kgolem-designer&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=jackanakin_kgolem-designer)
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=jackanakin_kgolem-designer&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=jackanakin_kgolem-designer)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=jackanakin_kgolem-designer&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=jackanakin_kgolem-designer)
+[![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=jackanakin_kgolem-designer&metric=sqale_index)](https://sonarcloud.io/summary/new_code?id=jackanakin_kgolem-designer)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=jackanakin_kgolem-designer&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=jackanakin_kgolem-designer)
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=jackanakin_kgolem-designer&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=jackanakin_kgolem-designer)
+
+[Live Demo](https://jackanakin.github.io/kgolem-designer)
 
 ![](https://github.com/jackanakin/jackchat-canvas/blob/main/history/components/22092024.png?raw=true)
 
@@ -31,13 +41,12 @@ automatically reflected in the browser!
 </details>
 
 <details>
-  <summary><strong>History</strong> evolution</summary>
+  <summary><strong>Components</strong></summary>
   
 </details>
 
 <details>
-  <summary><strong>Components</strong></summary>
-  
+  <summary><strong>Stack</strong></summary>
 </details>
 
 ## Credits | The xyflow team (09/2024)
