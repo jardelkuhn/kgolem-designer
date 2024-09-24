@@ -7,11 +7,11 @@ import { isConnection } from "../_utilities/connection.utilities";
 import { useDesigner } from "../../../../../context/designer";
 
 interface Props {
-  id?: string;
-  parentId: string;
-  type: HandleType;
-  position: Position;
-  style?: CSSProperties;
+  readonly id?: string;
+  readonly parentId: string;
+  readonly type: HandleType;
+  readonly position: Position;
+  readonly style?: CSSProperties;
 }
 
 export function CustomHandle(props: Props) {

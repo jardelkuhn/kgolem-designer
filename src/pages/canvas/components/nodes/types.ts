@@ -8,7 +8,10 @@ export type CustomNodeProps = {
 };
 
 export type DnDProps = {
-  onDragStart: (event: React.DragEvent<HTMLDivElement>, type: NodeType) => void;
+  readonly onDragStart: (
+    event: React.DragEvent<HTMLDivElement>,
+    type: NodeType
+  ) => void;
 };
 
 export type AppNode = WANode;

@@ -8,9 +8,9 @@ import { WAOptionsDnD } from "../../nodes/wa/options/dnd";
 import { useDnD } from "../../../../../context/dnd";
 
 interface Props {
-  onSave: () => void;
-  onRestore: () => void;
-  onDelete: () => void;
+  readonly onSave: () => void;
+  readonly onRestore: () => void;
+  readonly onDelete: () => void;
 }
 
 export function WhatsAppSidebar({ onSave, onRestore, onDelete }: Props) {

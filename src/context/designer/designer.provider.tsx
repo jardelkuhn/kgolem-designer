@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from "react";
+import React, { useCallback, useMemo, useRef, useState } from "react";
 import {
   addEdge,
   ColorMode,
@@ -22,11 +22,11 @@ import { useDnD } from "../dnd";
 import { DefaultProviderProps } from "../@interfaces";
 
 interface DesignerContextProps {
-  nodeEntered?: AppNode;
-  connectStartParams?: OnConnectStartParams;
-  edges: Edge[];
+  readonly nodeEntered?: AppNode;
+  readonly connectStartParams?: OnConnectStartParams;
+  readonly edges: Edge[];
 
-  getHandles: () => JSX.Element[];
+  readonly getHandles: () => JSX.Element[];
 }
 
 export const DesignerContext = React.createContext<DesignerContextProps>(null!);
@@ -162,15 +162,13 @@ export function DesignerProvider(props: DefaultProviderProps) {
     return [];
   }, []);
 
+  const value = useMemo(
+    () => ({ nodeEntered, connectStartParams, edges, getHandles }),
+    [nodeEntered, connectStartParams, edges, getHandles]
+  );
+
   return (
-    <DesignerContext.Provider
-      value={{
-        nodeEntered,
-        connectStartParams,
-        edges,
-        getHandles,
-      }}
-    >
+    <DesignerContext.Provider value={value}>
       <Container>
         <ReactFlowWrapper ref={reactFlowWrapper}>
           <ReactFlow

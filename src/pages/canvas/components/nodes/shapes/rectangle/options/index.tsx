@@ -5,10 +5,10 @@ import { CustomHandle } from "../../../../handles/custom";
 import { ColorProps, NodeOption } from "../../../@interfaces";
 
 interface Props {
-  nodeId: string;
-  color: ColorProps;
-  option: NodeOption;
-  top: number;
+  readonly nodeId: string;
+  readonly color: ColorProps;
+  readonly option: NodeOption;
+  readonly top: number;
 }
 
 export function RectangleOption(props: Props) {
