@@ -1,4 +1,4 @@
-import { NodeType } from "../../..";
+import { CustomNodeType } from "../../../@interfaces";
 import { AppNode } from "../../../types";
 import { WANode } from "../../../wa/types";
 
@@ -12,8 +12,8 @@ export function isWAType(type?: string): boolean {
 
 const check = (type?: string): boolean => {
   return (
-    type === NodeType.WAOptions ||
-    type === NodeType.WAStart ||
-    type === NodeType.WAPlainText
+    type === CustomNodeType.WAOptions ||
+    type === CustomNodeType.WAStart ||
+    type === CustomNodeType.WAPlainText
   );
 };

@@ -1,3 +1,3 @@
 export interface DefaultProviderProps {
-  children: React.ReactNode | React.ReactNode[];
+  readonly children: React.ReactNode | React.ReactNode[];
 }

@@ -1,7 +1,7 @@
-import { NodeType } from "../../..";
+import { CustomNodeType } from "../../../@interfaces";
 
 export const isStartNode = (type?: string) => {
-  if (type === NodeType.WAStart) {
+  if (type === CustomNodeType.WAStart) {
     return true;
   }
 

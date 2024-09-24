@@ -1,5 +1,4 @@
-import { NodeType } from "../..";
-import { NodeParams } from "../../@interfaces";
+import { CustomNodeType, NodeParams } from "../../@interfaces";
 import {
   waPlainTextParams,
   waStartParams,
@@ -9,15 +8,15 @@ import {
 
 class NodeParamsFactory {
   static create(type?: string): NodeParams {
-    if (type === NodeType.WAPlainText) {
+    if (type === CustomNodeType.WAPlainText) {
       return waPlainTextParams;
     }
 
-    if (type === NodeType.WAStart) {
+    if (type === CustomNodeType.WAStart) {
       return waStartParams;
     }
 
-    if (type === NodeType.WAOptions) {
+    if (type === CustomNodeType.WAOptions) {
       return waOptionsParams;
     }
 

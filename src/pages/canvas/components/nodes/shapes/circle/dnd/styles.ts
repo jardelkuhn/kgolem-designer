@@ -1,12 +1,13 @@
 import styled from "styled-components";
 
 import { getTitleFonts } from "../../../_utilities/colors";
+import { ColorProps } from "../../../@interfaces";
 
 interface ContainerProps {
-  background: string;
+  color: ColorProps;
 }
 
-export const DndRoundedContainer = styled.div<ContainerProps>`
+export const Container = styled.div<ContainerProps>`
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
@@ -20,7 +21,7 @@ export const DndRoundedContainer = styled.div<ContainerProps>`
 
   border: 2px solid transparent;
   border-radius: 100px;
-  background: ${(props) => props.background};
+  background: ${(props) => props.color.background};
 
   ${getTitleFonts()}
   font-size: 10px !important;

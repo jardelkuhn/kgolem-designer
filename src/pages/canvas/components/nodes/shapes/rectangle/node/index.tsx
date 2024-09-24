@@ -14,12 +14,13 @@ import {
 } from "../styles";
 import NodeColorsFactory from "../../../_utilities/factories/node-colors.factory";
 import NodeParamsFactory from "../../../_utilities/factories/node-params.factory";
-import { AppNode } from "../../../types";
 import HandleFactory from "../../../../handles/_utilities/factories/handle.factory";
+import { AppNode } from "../../../types";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const withRectangleShape = (WrappedComponent: any) => {
-  return (props: NodeProps<AppNode>) => {
+const withRectangleShape = <T extends NodeProps<AppNode>>(
+  WrappedComponent: React.ComponentType<T>
+) => {
+  return (props: T) => {
     const params = NodeParamsFactory.create(props.type);
     const color = new NodeColorsFactory(props.type).get(props.selected);
 

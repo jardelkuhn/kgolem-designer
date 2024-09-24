@@ -16,9 +16,10 @@ import NodeParamsFactory from "../../../_utilities/factories/node-params.factory
 import NodeColorsFactory from "../../../_utilities/factories/node-colors.factory";
 import HandleFactory from "../../../../handles/_utilities/factories/handle.factory";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const withCircleShape = (WrappedComponent: any) => {
-  return (props: NodeProps<AppNode>) => {
+const withCircleShape = <T extends NodeProps<AppNode>>(
+  WrappedComponent: React.ComponentType<T>
+) => {
+  return (props: T) => {
     const params = NodeParamsFactory.create(props.type);
     const color = new NodeColorsFactory(props.type).get(props.selected);
 

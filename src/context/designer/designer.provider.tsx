@@ -12,7 +12,7 @@ import {
   useReactFlow,
 } from "@xyflow/react";
 
-import { NodeType, nodeTypes } from "../../pages/canvas/components/nodes";
+import { nodeTypes } from "../../pages/canvas/components/nodes";
 import { EdgeType, edgeTypes } from "../../pages/canvas/components/edges";
 import { AppNode } from "../../pages/canvas/components/nodes/types";
 import { Container, ReactFlowWrapper } from "./styles";
@@ -20,6 +20,10 @@ import { WhatsAppSidebar } from "../../pages/canvas/components/sidebars/whatsapp
 import { WANode } from "../../pages/canvas/components/nodes/wa/types";
 import { useDnD } from "../dnd";
 import { DefaultProviderProps } from "../@interfaces";
+import {
+  CustomNodeType,
+  NodeOption,
+} from "../../pages/canvas/components/nodes/@interfaces";
 
 interface DesignerContextProps {
   readonly nodeEntered?: AppNode;
@@ -99,15 +103,10 @@ export function DesignerProvider(props: DefaultProviderProps) {
 
       const uuid = getId();
 
-      const newNode = {
-        id: uuid,
-        type,
-        position,
-        data: { label: `${type} node`, options: [] },
-      } as WANode;
+      let options: NodeOption[] = [];
 
-      if (type === NodeType.WAOptions) {
-        newNode.data.options = [
+      if (type === CustomNodeType.WAOptions) {
+        options = [
           { id: "1", label: "Option 1" },
           { id: "2", label: "Option 2" },
           { id: "3", label: "Option 3" },
@@ -115,6 +114,13 @@ export function DesignerProvider(props: DefaultProviderProps) {
           { id: "5", label: "Option 5" },
         ];
       }
+
+      const newNode = {
+        id: uuid,
+        type,
+        position,
+        data: { label: `${type} node`, options },
+      } as WANode;
 
       setNodes((nds) => nds.concat(newNode));
     },

@@ -1,11 +1,17 @@
 import React from "react";
 
 import { Aside, Description } from "./styles";
-import { WAPlainTextDnD } from "../../nodes/wa/plain-text/dnd";
-import { NodeType } from "../../nodes";
-import { WAStartDnD } from "../../nodes/wa/start/dnd";
-import { WAOptionsDnD } from "../../nodes/wa/options/dnd";
 import { useDnD } from "../../../../../context/dnd";
+import { WAStartDnD } from "../../nodes/wa/start/dnd";
+import { waColors } from "../../nodes/_utilities/colors";
+import {
+  waOptionsParams,
+  waPlainTextParams,
+  waStartParams,
+} from "../../nodes/_utilities/params";
+import { CustomNodeType } from "../../nodes/@interfaces";
+import { WAPlainTextDnD } from "../../nodes/wa/plain-text/dnd";
+import { WAOptionsDnD } from "../../nodes/wa/options/dnd";
 
 interface Props {
   readonly onSave: () => void;
@@ -18,7 +24,7 @@ export function WhatsAppSidebar({ onSave, onRestore, onDelete }: Props) {
 
   const onDragStart = (
     event: React.DragEvent<HTMLDivElement>,
-    type: NodeType
+    type: CustomNodeType
   ) => {
     setType(type);
     event.dataTransfer.effectAllowed = "move";
@@ -29,9 +35,21 @@ export function WhatsAppSidebar({ onSave, onRestore, onDelete }: Props) {
       <Description>
         You can drag these nodes to the pane on the left
       </Description>
-      <WAStartDnD onDragStart={onDragStart} />
-      <WAPlainTextDnD onDragStart={onDragStart} />
-      <WAOptionsDnD onDragStart={onDragStart} />
+      <WAStartDnD
+        color={waColors}
+        params={waStartParams}
+        onDragStart={onDragStart}
+      />
+      <WAPlainTextDnD
+        color={waColors}
+        params={waPlainTextParams}
+        onDragStart={onDragStart}
+      />
+      <WAOptionsDnD
+        color={waColors}
+        params={waOptionsParams}
+        onDragStart={onDragStart}
+      />
       <button onClick={onSave}>save</button>
       <button onClick={onRestore}>restore</button>
       <button onClick={onDelete}>delete</button>

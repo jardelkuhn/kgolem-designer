@@ -1,18 +1,9 @@
-import { NodeType } from "../../..";
-import { waColors } from "../../../_utilities/colors";
-import { waStartParams } from "../../../_utilities/params";
-import { DndRoundedContainer } from "../../../shapes/circle/dnd";
-import { DnDProps } from "../../../types";
+import { DnDProps } from "../../../@interfaces";
+import withCircleDnd from "../../../shapes/circle/dnd";
 
-export function WAStartDnD({ onDragStart }: DnDProps) {
-  return (
-    <DndRoundedContainer
-      background={waColors.color.normal.background}
-      onDragStart={(event) => onDragStart(event, NodeType.WAStart)}
-      draggable
-    >
-      <i className={waStartParams.familyIcon}></i>
-      {waStartParams.title}
-    </DndRoundedContainer>
-  );
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function WAStart(_props: DnDProps) {
+  return <></>;
 }
+
+export const WAStartDnD = withCircleDnd(WAStart);

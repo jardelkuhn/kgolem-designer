@@ -2,8 +2,8 @@ import { ReactElement } from "react";
 import { HandleType, Position } from "@xyflow/react";
 
 import { CustomHandle } from "../../custom";
-import { NodeType } from "../../../nodes";
 import { isStartNode } from "../../../nodes/_utilities/guards/wa/start-node.guard";
+import { CustomNodeType } from "../../../nodes/@interfaces";
 
 class HandleFactory {
   static createHandles(nodeId: string, type?: string) {
@@ -11,7 +11,7 @@ class HandleFactory {
       return this.createHandlesForStartNode(nodeId);
     }
 
-    if (type === NodeType.WAOptions) {
+    if (type === CustomNodeType.WAOptions) {
       return this.createHandlesForOptionNode(nodeId);
     }
 

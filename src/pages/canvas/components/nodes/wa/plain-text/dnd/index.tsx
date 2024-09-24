@@ -1,18 +1,9 @@
-import { NodeType } from "../../..";
-import { waColors } from "../../../_utilities/colors";
-import { waPlainTextParams } from "../../../_utilities/params";
-import { DndRectangleContainer } from "../../../shapes/rectangle/dnd";
-import { DnDProps } from "../../../types";
+import { DnDProps } from "../../../@interfaces";
+import withCircleDnd from "../../../shapes/circle/dnd";
 
-export function WAPlainTextDnD({ onDragStart }: DnDProps) {
-  return (
-    <DndRectangleContainer
-      background={waColors.color.normal.background}
-      onDragStart={(event) => onDragStart(event, NodeType.WAPlainText)}
-      draggable
-    >
-      <i className={waPlainTextParams.familyIcon}></i>
-      {waPlainTextParams.title}
-    </DndRectangleContainer>
-  );
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function WAPlainText(_props: DnDProps) {
+  return <></>;
 }
+
+export const WAPlainTextDnD = withCircleDnd(WAPlainText);

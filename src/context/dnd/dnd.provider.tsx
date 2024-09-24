@@ -1,17 +1,17 @@
 import { createContext, useMemo, useState } from "react";
 
-import { NodeType } from "../../pages/canvas/components/nodes";
 import { DefaultProviderProps } from "../@interfaces";
+import { CustomNodeType } from "../../pages/canvas/components/nodes/@interfaces";
 
 interface DnDContextProps {
-  readonly type: NodeType | null;
-  readonly setType: (value: NodeType) => void;
+  readonly type: CustomNodeType | null;
+  readonly setType: (value: CustomNodeType) => void;
 }
 
 export const DnDContext = createContext<DnDContextProps>(null!);
 
 export function DnDProvider(props: DefaultProviderProps) {
-  const [type, setType] = useState<NodeType | null>(null);
+  const [type, setType] = useState<CustomNodeType | null>(null);
 
   const value = useMemo(() => ({ type, setType }), [type, setType]);
 
