@@ -13,24 +13,26 @@ import {
 } from "@xyflow/react";
 
 import { nodeTypes } from "../../pages/canvas/components/nodes";
-import { EdgeType, edgeTypes } from "../../pages/canvas/components/edges";
+import { edgeTypes } from "../../pages/canvas/components/edges";
 import { AppNode } from "../../pages/canvas/components/nodes/types";
 import { Container, ReactFlowWrapper } from "./styles";
 import { WhatsAppSidebar } from "../../pages/canvas/components/sidebars/whatsapp";
 import { WANode } from "../../pages/canvas/components/nodes/wa/types";
 import { useDnD } from "../dnd";
 import { DefaultProviderProps } from "../@interfaces";
-import {
-  CustomNodeType,
-  NodeOption,
-} from "../../pages/canvas/components/nodes/@interfaces";
+import { NodeOption } from "../../models";
+import { CustomNodeType } from "../../pages/canvas/components/nodes/@interfaces";
+import { CustomEdgeType } from "../../pages/canvas/components/edges/@interfaces";
+import { DesignerService } from "../../services/designer";
 
 interface DesignerContextProps {
   readonly nodeEntered?: AppNode;
   readonly connectStartParams?: OnConnectStartParams;
   readonly edges: Edge[];
-
   readonly getHandles: () => JSX.Element[];
+
+  readonly autoSave: boolean;
+  readonly setAutoSave: (value: boolean) => void;
 }
 
 export const DesignerContext = React.createContext<DesignerContextProps>(null!);
@@ -40,8 +42,11 @@ const getId = () => `dndnode_${id++}`;
 const flowKey = "example-flow";
 
 export function DesignerProvider(props: DefaultProviderProps) {
+  const designerService = DesignerService.getInstance();
+
   const reactFlowWrapper = useRef(null);
 
+  const [autoSave, setAutoSave] = useState(false);
   const [colorMode] = useState<ColorMode>("dark");
   const [rfInstance, setRfInstance] = useState<ReactFlowInstance<AppNode>>();
 
@@ -55,7 +60,7 @@ export function DesignerProvider(props: DefaultProviderProps) {
     (connection) => {
       setEdges((edges) =>
         addEdge(
-          { ...connection, animated: true, type: EdgeType.CustomEdge },
+          { ...connection, animated: true, type: CustomEdgeType.CustomEdge },
           edges
         )
       );
@@ -107,11 +112,11 @@ export function DesignerProvider(props: DefaultProviderProps) {
 
       if (type === CustomNodeType.WAOptions) {
         options = [
-          { id: "1", label: "Option 1" },
-          { id: "2", label: "Option 2" },
-          { id: "3", label: "Option 3" },
-          { id: "4", label: "Option 4" },
-          { id: "5", label: "Option 5" },
+          { uuid: "1", label: "Option 1" },
+          { uuid: "2", label: "Option 2" },
+          { uuid: "3", label: "Option 3" },
+          { uuid: "4", label: "Option 4" },
+          { uuid: "5", label: "Option 5" },
         ];
       }
 
@@ -131,12 +136,9 @@ export function DesignerProvider(props: DefaultProviderProps) {
     if (rfInstance) {
       const flow = rfInstance.toObject();
 
-      // const sanitizedFlows =
-      // passar os handles de outra forma
-
-      localStorage.setItem(flowKey, JSON.stringify(flow));
+      designerService.save(flow);
     }
-  }, [rfInstance]);
+  }, [designerService, rfInstance]);
 
   const onDelete = useCallback(() => {
     localStorage.removeItem(flowKey);
@@ -168,9 +170,20 @@ export function DesignerProvider(props: DefaultProviderProps) {
     return [];
   }, []);
 
+  const onInit = (reactFlowInstance: ReactFlowInstance<AppNode>): void => {
+    setRfInstance(designerService.initializeFlowInstance(reactFlowInstance));
+  };
+
   const value = useMemo(
-    () => ({ nodeEntered, connectStartParams, edges, getHandles }),
-    [nodeEntered, connectStartParams, edges, getHandles]
+    () => ({
+      nodeEntered,
+      connectStartParams,
+      edges,
+      autoSave,
+      getHandles,
+      setAutoSave,
+    }),
+    [nodeEntered, connectStartParams, edges, autoSave, getHandles, setAutoSave]
   );
 
   return (
@@ -179,7 +192,7 @@ export function DesignerProvider(props: DefaultProviderProps) {
         <ReactFlowWrapper ref={reactFlowWrapper}>
           <ReactFlow
             fitView
-            onInit={setRfInstance}
+            onInit={onInit}
             elementsSelectable
             deleteKeyCode="Delete"
             nodes={nodes}

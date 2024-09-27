@@ -12,6 +12,7 @@ import {
 import { CustomNodeType } from "../../nodes/@interfaces";
 import { WAPlainTextDnD } from "../../nodes/wa/plain-text/dnd";
 import { WAOptionsDnD } from "../../nodes/wa/options/dnd";
+import { useDesigner } from "../../../../../context/designer";
 
 interface Props {
   readonly onSave: () => void;
@@ -21,6 +22,7 @@ interface Props {
 
 export function WhatsAppSidebar({ onSave, onRestore, onDelete }: Props) {
   const { setType } = useDnD();
+  const { autoSave, setAutoSave } = useDesigner();
 
   const onDragStart = (
     event: React.DragEvent<HTMLDivElement>,
@@ -50,6 +52,10 @@ export function WhatsAppSidebar({ onSave, onRestore, onDelete }: Props) {
         params={waOptionsParams}
         onDragStart={onDragStart}
       />
+
+      <Description>AUTOSAVE: {autoSave ? "ON" : "OFF"}</Description>
+      <button onClick={() => setAutoSave(!autoSave)}>TOGGLE AUTOSAVE</button>
+      <br/>
       <button onClick={onSave}>save</button>
       <button onClick={onRestore}>restore</button>
       <button onClick={onDelete}>delete</button>

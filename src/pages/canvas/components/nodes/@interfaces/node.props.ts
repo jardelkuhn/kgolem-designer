@@ -1,4 +1,4 @@
-import { NodeOption } from "./node.options";
+import { NodeOption } from "../../../../../models";
 
 export type CustomNodeProps = {
   readonly label: string;

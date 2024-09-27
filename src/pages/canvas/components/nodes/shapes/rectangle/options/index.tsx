@@ -2,7 +2,8 @@ import { Position } from "@xyflow/react";
 
 import { OptionContainer, OptionLabel } from "../styles";
 import { CustomHandle } from "../../../../handles/custom";
-import { ColorProps, NodeOption } from "../../../@interfaces";
+import { ColorProps } from "../../../@interfaces";
+import { NodeOption } from "../../../../../../../models";
 
 interface Props {
   readonly nodeId: string;
