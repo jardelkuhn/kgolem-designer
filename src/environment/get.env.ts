@@ -1,8 +1,8 @@
-import { RepositoryMethod } from "./@types";
+import { ServicesMethod } from "./@types";
 
-export const getRepositoryMethod = () => {
-  const value: RepositoryMethod =
-    (import.meta.env.VITE_REPOSITORY as RepositoryMethod) || "LOCAL";
+export const getServicesMethod = () => {
+  const value: ServicesMethod =
+    (import.meta.env.VITE_REPOSITORY as ServicesMethod) || "LOCAL";
 
   return value;
 };

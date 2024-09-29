@@ -19,8 +19,8 @@ export function RectangleOption(props: Props) {
     <OptionContainer color={color}>
       <OptionLabel>{option.label}</OptionLabel>
       <CustomHandle
-        id={option.id}
-        key={"id"}
+        id={option.designerId}
+        key={option.designerId}
         parentId={nodeId}
         type="source"
         position={Position.Right}

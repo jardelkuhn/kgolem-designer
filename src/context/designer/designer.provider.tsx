@@ -1,4 +1,10 @@
-import React, { useCallback, useMemo, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import {
   addEdge,
   ColorMode,
@@ -17,13 +23,11 @@ import { edgeTypes } from "../../pages/canvas/components/edges";
 import { AppNode } from "../../pages/canvas/components/nodes/types";
 import { Container, ReactFlowWrapper } from "./styles";
 import { WhatsAppSidebar } from "../../pages/canvas/components/sidebars/whatsapp";
-import { WANode } from "../../pages/canvas/components/nodes/wa/types";
 import { useDnD } from "../dnd";
 import { DefaultProviderProps } from "../@interfaces";
-import { NodeOption } from "../../models";
-import { CustomNodeType } from "../../pages/canvas/components/nodes/@interfaces";
+import { FlowModel } from "../../models";
 import { CustomEdgeType } from "../../pages/canvas/components/edges/@interfaces";
-import { DesignerService } from "../../services/designer";
+import { ManagersModule } from "../../managers/managers.module";
 
 interface DesignerContextProps {
   readonly nodeEntered?: AppNode;
@@ -33,16 +37,14 @@ interface DesignerContextProps {
 
   readonly autoSave: boolean;
   readonly setAutoSave: (value: boolean) => void;
+
+  readonly flows: FlowModel[];
 }
 
 export const DesignerContext = React.createContext<DesignerContextProps>(null!);
 
-let id = 0;
-const getId = () => `dndnode_${id++}`;
-const flowKey = "example-flow";
-
 export function DesignerProvider(props: DefaultProviderProps) {
-  const designerService = DesignerService.getInstance();
+  const designerService = ManagersModule.getInstance().getDesignerManager();
 
   const reactFlowWrapper = useRef(null);
 
@@ -50,11 +52,21 @@ export function DesignerProvider(props: DefaultProviderProps) {
   const [colorMode] = useState<ColorMode>("dark");
   const [rfInstance, setRfInstance] = useState<ReactFlowInstance<AppNode>>();
 
+  // remove it from here
+  const [flows, setFlows] = useState<FlowModel[]>([]);
+  // remove it from here
+
   const [nodes, setNodes, onNodesChange] = useNodesState<AppNode>([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([]);
 
   const { setViewport, screenToFlowPosition } = useReactFlow();
   const { type } = useDnD();
+
+  const [nodeEntered, setNodeEntered] = useState<AppNode | undefined>(
+    undefined
+  );
+  const [connectStartParams, setConnectStartParams] =
+    useState<OnConnectStartParams>();
 
   const onConnect: OnConnect = useCallback(
     (connection) => {
@@ -68,11 +80,11 @@ export function DesignerProvider(props: DefaultProviderProps) {
     [setEdges]
   );
 
-  const [nodeEntered, setNodeEntered] = useState<AppNode | undefined>(
-    undefined
-  );
-  const [connectStartParams, setConnectStartParams] =
-    useState<OnConnectStartParams>();
+  const loadData = useCallback(async () => {
+    const flows = await designerService.listFlows();
+
+    setFlows(flows);
+  }, [designerService]);
 
   const onNodeMouseEnter = (_event: unknown, node: AppNode) =>
     setNodeEntered(node);
@@ -93,10 +105,9 @@ export function DesignerProvider(props: DefaultProviderProps) {
   }, []);
 
   const onDrop = useCallback(
-    (event: React.DragEvent<HTMLDivElement>) => {
+    async (event: React.DragEvent<HTMLDivElement>) => {
       event.preventDefault();
 
-      // check if the dropped element is valid
       if (!type) {
         return;
       }
@@ -106,63 +117,76 @@ export function DesignerProvider(props: DefaultProviderProps) {
         y: event.clientY,
       });
 
-      const uuid = getId();
-
-      let options: NodeOption[] = [];
-
-      if (type === CustomNodeType.WAOptions) {
-        options = [
-          { uuid: "1", label: "Option 1" },
-          { uuid: "2", label: "Option 2" },
-          { uuid: "3", label: "Option 3" },
-          { uuid: "4", label: "Option 4" },
-          { uuid: "5", label: "Option 5" },
-        ];
-      }
-
-      const newNode = {
-        id: uuid,
+      const newNode = await designerService.createNode({
         type,
         position,
-        data: { label: `${type} node`, options },
-      } as WANode;
+        data: { label: `${type} node`, options: [] },
+      });
 
       setNodes((nds) => nds.concat(newNode));
     },
-    [screenToFlowPosition, setNodes, type]
+    [designerService, screenToFlowPosition, setNodes, type]
   );
 
-  const onSave = useCallback(() => {
+  const onSave = useCallback(async () => {
     if (rfInstance) {
       const flow = rfInstance.toObject();
 
-      designerService.save(flow);
+      await designerService.save(flow);
+
+      loadData();
     }
-  }, [designerService, rfInstance]);
+  }, [designerService, rfInstance, loadData]);
 
-  const onDelete = useCallback(() => {
-    localStorage.removeItem(flowKey);
-    setRfInstance(undefined);
-    setNodes([]);
-    setEdges([]);
-  }, [setEdges, setNodes]);
+  const onDelete = useCallback(
+    async (uuid: string) => {
+      await designerService.deleteFlow(uuid);
 
-  const onRestore = useCallback(() => {
-    const restoreFlow = async () => {
-      const storage = localStorage.getItem(flowKey) ?? "{}";
+      setNodes([]);
+      setEdges([]);
 
-      const flow = JSON.parse(storage);
+      setFlows((current) => current.filter((f) => f.uuid !== uuid));
+    },
+    [designerService, setEdges, setNodes]
+  );
 
-      if (flow) {
-        const { x = 0, y = 0, zoom = 1 } = flow.viewport;
-        setNodes(flow.nodes || []);
-        setEdges(flow.edges || []);
-        setViewport({ x, y, zoom });
-      }
-    };
+  const onRestore = useCallback(
+    (uuid: string) => {
+      const restoreFlow = async (uuid: string) => {
+        const { flow, nodes, edges } = await designerService.loadFlow(uuid);
 
-    restoreFlow();
-  }, [setEdges, setNodes, setViewport]);
+        if (flow) {
+          setNodes(
+            nodes.map((n) => {
+              return {
+                id: n.designerId,
+                data: n.data,
+                type: n.type,
+                position: n.position,
+              } as AppNode;
+            })
+          );
+          setEdges(
+            edges.map((e) => {
+              return {
+                id: e.designerId,
+                type: e.type,
+                animated: e.animated,
+                source: e.source,
+                sourceHandle: e.sourceHandle,
+                target: e.target,
+                targetHandle: e.targetHandle,
+              } as Edge;
+            })
+          );
+          setViewport(flow.viewport);
+        }
+      };
+
+      restoreFlow(uuid);
+    },
+    [designerService, setEdges, setNodes, setViewport]
+  );
 
   const getHandles = useCallback((): JSX.Element[] => {
     // handleFactory.createHandles()
@@ -171,8 +195,21 @@ export function DesignerProvider(props: DefaultProviderProps) {
   }, []);
 
   const onInit = (reactFlowInstance: ReactFlowInstance<AppNode>): void => {
-    setRfInstance(designerService.initializeFlowInstance(reactFlowInstance));
+    setRfInstance(reactFlowInstance);
+
+    designerService.reset();
   };
+
+  const onCreate = () => {
+    designerService.reset();
+
+    setNodes([]);
+    setEdges([]);
+  };
+
+  useEffect(() => {
+    loadData();
+  }, [loadData]);
 
   const value = useMemo(
     () => ({
@@ -180,10 +217,11 @@ export function DesignerProvider(props: DefaultProviderProps) {
       connectStartParams,
       edges,
       autoSave,
+      flows,
       getHandles,
       setAutoSave,
     }),
-    [nodeEntered, connectStartParams, edges, autoSave, getHandles, setAutoSave]
+    [nodeEntered, connectStartParams, edges, autoSave, flows, getHandles]
   );
 
   return (
@@ -215,6 +253,7 @@ export function DesignerProvider(props: DefaultProviderProps) {
         </ReactFlowWrapper>
         <WhatsAppSidebar
           onSave={onSave}
+          onCreate={onCreate}
           onRestore={onRestore}
           onDelete={onDelete}
         />

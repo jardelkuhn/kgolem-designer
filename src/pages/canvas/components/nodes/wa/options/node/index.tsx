@@ -25,7 +25,7 @@ function OptionsNode({ data, id, selected }: NodeProps<WAOptionsNodeType>) {
 
       {options.map((opt, index) => (
         <RectangleOption
-          key={opt.id}
+          key={opt.designerId}
           nodeId={id}
           option={opt}
           top={73 + index * 17}

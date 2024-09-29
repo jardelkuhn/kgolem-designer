@@ -1,4 +1,5 @@
 import { CustomNodeType } from "../pages/canvas/components/nodes/@interfaces";
+import { Nullable } from "../@types";
 
 export interface Position {
   x: number;
@@ -6,8 +7,10 @@ export interface Position {
 }
 
 export interface NodeOption {
-  uuid: string;
+  uuid?: string;
   label: string;
+
+  designerId: string;
 }
 
 export interface Data {
@@ -15,19 +18,28 @@ export interface Data {
   options: NodeOption[];
 }
 
-export interface Measured {
-  width: number;
-  height: number;
-}
-
-export interface NodeModel {
-  uuid: string;
+export class NodeModel {
+  uuid: Nullable<string>;
   type: CustomNodeType;
   position: Position;
   data: Data;
-  measured: Measured;
-  selected: boolean;
-  dragging: boolean;
 
   ref_flow: string;
+
+  designerId: string;
+
+  constructor(
+    uuid: Nullable<string>,
+    type: CustomNodeType,
+    position: Position,
+    data: Data,
+    ref_flow: string
+  ) {
+    this.uuid = uuid;
+    this.type = type;
+    this.position = position;
+    this.data = data;
+    this.ref_flow = ref_flow;
+    this.designerId = crypto.randomUUID();
+  }
 }
