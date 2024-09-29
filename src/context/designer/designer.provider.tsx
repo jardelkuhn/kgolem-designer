@@ -26,7 +26,6 @@ import { WhatsAppSidebar } from "../../pages/canvas/components/sidebars/whatsapp
 import { useDnD } from "../dnd";
 import { DefaultProviderProps } from "../@interfaces";
 import { FlowModel } from "../../models";
-import { CustomEdgeType } from "../../pages/canvas/components/edges/@interfaces";
 import { ManagersModule } from "../../managers/managers.module";
 
 interface DesignerContextProps {
@@ -69,15 +68,12 @@ export function DesignerProvider(props: DefaultProviderProps) {
     useState<OnConnectStartParams>();
 
   const onConnect: OnConnect = useCallback(
-    (connection) => {
-      setEdges((edges) =>
-        addEdge(
-          { ...connection, animated: true, type: CustomEdgeType.CustomEdge },
-          edges
-        )
-      );
+    async (connection) => {
+      const edge = await designerService.createEdge(connection);
+
+      setEdges((edges) => addEdge(edge.toInstance(), edges));
     },
-    [setEdges]
+    [designerService, setEdges]
   );
 
   const loadData = useCallback(async () => {
@@ -117,13 +113,12 @@ export function DesignerProvider(props: DefaultProviderProps) {
         y: event.clientY,
       });
 
-      const newNode = await designerService.createNode({
-        type,
-        position,
-        data: { label: `${type} node`, options: [] },
+      const newNode = await designerService.createNode(position, type, {
+        label: `${type} node`,
+        options: [],
       });
 
-      setNodes((nds) => nds.concat(newNode));
+      setNodes((nds) => nds.concat(newNode.toInstance()));
     },
     [designerService, screenToFlowPosition, setNodes, type]
   );
@@ -154,18 +149,9 @@ export function DesignerProvider(props: DefaultProviderProps) {
     (uuid: string) => {
       const restoreFlow = async (uuid: string) => {
         const { flow, nodes, edges } = await designerService.loadFlow(uuid);
-
+        console.log(nodes);
         if (flow) {
-          setNodes(
-            nodes.map((n) => {
-              return {
-                id: n.designerId,
-                data: n.data,
-                type: n.type,
-                position: n.position,
-              } as AppNode;
-            })
-          );
+          setNodes(nodes.map((n) => n.toInstance()));
           setEdges(
             edges.map((e) => {
               return {
@@ -200,7 +186,7 @@ export function DesignerProvider(props: DefaultProviderProps) {
     designerService.reset();
   };
 
-  const onCreate = () => {
+  const onNewFlow = () => {
     designerService.reset();
 
     setNodes([]);
@@ -253,7 +239,7 @@ export function DesignerProvider(props: DefaultProviderProps) {
         </ReactFlowWrapper>
         <WhatsAppSidebar
           onSave={onSave}
-          onCreate={onCreate}
+          onCreate={onNewFlow}
           onRestore={onRestore}
           onDelete={onDelete}
         />

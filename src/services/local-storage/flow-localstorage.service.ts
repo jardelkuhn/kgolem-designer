@@ -1,3 +1,5 @@
+import { plainToInstance } from "class-transformer";
+
 import { EdgeModel, FlowModel, NodeModel } from "../../models";
 import { FlowService } from "../@interfaces";
 import { FlowDTO } from "../@types";
@@ -18,15 +20,24 @@ export class LocalStorageFlowService implements FlowService {
   private readonly storageService = LocalStorageService.getInstance();
 
   async listFlows(): Promise<FlowModel[]> {
-    return this.storageService.getValue<FlowModel[]>("flows-repository") ?? [];
+    const result =
+      this.storageService.getValue<FlowModel[]>("flows-repository");
+
+    return result ? plainToInstance(FlowModel, result) : [];
   }
 
   async listNodes(): Promise<NodeModel[]> {
-    return this.storageService.getValue<NodeModel[]>("nodes-repository") ?? [];
+    const result =
+      this.storageService.getValue<NodeModel[]>("nodes-repository");
+
+    return result ? plainToInstance(NodeModel, result) : [];
   }
 
   async listEdges(): Promise<EdgeModel[]> {
-    return this.storageService.getValue<EdgeModel[]>("edges-repository") ?? [];
+    const result =
+      this.storageService.getValue<EdgeModel[]>("edges-repository");
+
+    return result ? plainToInstance(EdgeModel, result) : [];
   }
 
   async saveFlow({ flow, nodes, edges }: FlowDTO): Promise<FlowDTO> {
@@ -85,13 +96,11 @@ export class LocalStorageFlowService implements FlowService {
 
     // add new nodes
     newNodes.forEach((nw) => {
-      nw.data.options.forEach((o) => (o.uuid = crypto.randomUUID()));
+      nw.data?.options?.forEach((o) => (o.uuid = crypto.randomUUID()));
+      nw.uuid = crypto.randomUUID();
+      nw.ref_flow = flow.uuid!;
 
-      storageNodes.push({
-        ...nw,
-        uuid: crypto.randomUUID(),
-        ref_flow: flow.uuid!,
-      });
+      storageNodes.push(nw);
     });
 
     // remove deleted nodes
@@ -138,11 +147,10 @@ export class LocalStorageFlowService implements FlowService {
 
     // add new edges
     newEdges.forEach((ne) => {
-      storageEdges.push({
-        ...ne,
-        uuid: crypto.randomUUID(),
-        ref_flow: flow.uuid!,
-      });
+      ne.uuid = crypto.randomUUID();
+      ne.ref_flow = flow.uuid!;
+
+      storageEdges.push(ne);
     });
 
     // remove deleted edges

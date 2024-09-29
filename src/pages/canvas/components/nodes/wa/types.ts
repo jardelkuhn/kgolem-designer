@@ -1,9 +1,9 @@
 import type { Node } from "@xyflow/react";
 
-import { CustomNodeProps } from "../@interfaces";
+import { NodeData } from "../../../../../models";
 
-export type WAStartNodeType = Node<CustomNodeProps, "WAStart">;
-export type WAPlainTextNodeType = Node<CustomNodeProps, "WAPlainText">;
-export type WAOptionsNodeType = Node<CustomNodeProps, "WAOptions">;
+export type WAStartNodeType = Node<NodeData, "WAStart">;
+export type WAPlainTextNodeType = Node<NodeData, "WAPlainText">;
+export type WAOptionsNodeType = Node<NodeData, "WAOptions">;
 
 export type WANode = WAStartNodeType | WAPlainTextNodeType | WAOptionsNodeType;

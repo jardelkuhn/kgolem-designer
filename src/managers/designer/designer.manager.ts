@@ -1,13 +1,19 @@
-import { Edge, ReactFlowJsonObject } from "@xyflow/react";
+import {
+  Connection,
+  Edge,
+  ReactFlowJsonObject,
+  XYPosition,
+} from "@xyflow/react";
 
 import { AppNode } from "../../pages/canvas/components/nodes/types";
-import { EdgeModel, FlowModel, NodeModel } from "../../models";
+import { EdgeModel, FlowModel, NodeData, NodeModel } from "../../models";
 import { FlowModelBuilder } from "../../models/builders";
 import { LocaleService } from "../../services/common";
 import { Nullable } from "../../@types";
 import { FlowDTO } from "../../services/@types";
 import { CustomNodeType } from "../../pages/canvas/components/nodes/@interfaces";
 import { ServicesModule } from "../../services/services.module";
+import { CustomEdgeType } from "../../pages/canvas/components/edges/@interfaces";
 
 export class DesignerManager {
   private static instance: DesignerManager;
@@ -154,40 +160,32 @@ export class DesignerManager {
     }
   }
 
-  async createNode(partial: Partial<NodeModel>): Promise<AppNode> {
-    const designerId = crypto.randomUUID();
+  async createNode(
+    position: XYPosition,
+    type: CustomNodeType,
+    data: NodeData
+  ): Promise<NodeModel> {
+    const nodeModel = NodeModel.build(
+      position,
+      type,
+      data,
+      this.flowModel?.uuid
+    );
 
-    if (partial.data && partial.type === CustomNodeType.WAOptions) {
-      partial.data.options = [
-        { designerId: crypto.randomUUID(), label: "Option 1" },
-        { designerId: crypto.randomUUID(), label: "Option 2" },
-        { designerId: crypto.randomUUID(), label: "Option 3" },
-        { designerId: crypto.randomUUID(), label: "Option 4" },
-        { designerId: crypto.randomUUID(), label: "Option 5" },
-      ];
-    }
+    this.nodesModel.push(nodeModel);
 
-    const newNode = {
-      id: designerId,
-      type: partial.type ?? "default",
-      position: partial.position ?? { x: 0, y: 0 },
-      data: partial.data ?? { label: "unknown", options: [] },
-      designerId: designerId,
-    } as AppNode;
+    return nodeModel;
+  }
 
-    const newNodeModel = {
-      type: newNode.type,
-      data: newNode.data,
-      designerId: designerId,
-      position: newNode.position,
-      ref_flow: this.flowModel?.uuid,
-    } as NodeModel;
+  async createEdge(connection: Connection): Promise<EdgeModel> {
+    const edgeModel = EdgeModel.build(
+      connection,
+      CustomEdgeType.CustomEdge,
+      this.flowModel?.uuid
+    );
 
-    this.nodesModel.push(newNodeModel);
+    this.edgesModel.push(edgeModel);
 
-    // if autosave on, persist and generate uuid
-    // AppNode data field as NodeModel ?
-
-    return newNode;
+    return edgeModel;
   }
 }
