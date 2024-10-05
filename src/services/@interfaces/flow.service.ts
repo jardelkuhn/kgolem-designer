@@ -15,4 +15,10 @@ export interface FlowService {
   deleteFlow(uuid: string): Promise<void>;
 
   createNode(partial: Partial<NodeModel>): Promise<NodeModel>;
+  createEdge(partial: Partial<EdgeModel>): Promise<EdgeModel>;
+
+  updateNodes(nodes: NodeModel[]): Promise<NodeModel[]>;
+
+  setAutosave(value: boolean): Promise<void>;
+  getAutosave(): Promise<boolean>;
 }

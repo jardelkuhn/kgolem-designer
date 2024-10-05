@@ -16,7 +16,7 @@ export class LocaleService {
     return LocaleService.instance;
   }
 
-  public formatDate(date: Date, pattern: string = "MM/dd/yyyy"): string {
+  public formatDate(date: Date, pattern: string = "MM/dd/yyyy HH:mm:ss"): string {
     return format(date, pattern);
   }
 

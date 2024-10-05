@@ -1,7 +1,8 @@
 export type LocalStorageKey =
   | "flows-repository"
   | "nodes-repository"
-  | "edges-repository";
+  | "edges-repository"
+  | "autosave";
 
 export class LocalStorageService {
   private static instance: LocalStorageService;

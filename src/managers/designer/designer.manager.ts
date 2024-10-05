@@ -4,6 +4,7 @@ import {
   ReactFlowJsonObject,
   XYPosition,
 } from "@xyflow/react";
+import { plainToInstance } from "class-transformer";
 
 import { AppNode } from "../../pages/canvas/components/nodes/types";
 import { EdgeModel, FlowModel, NodeData, NodeModel } from "../../models";
@@ -31,6 +32,8 @@ export class DesignerManager {
   private edgesModel: EdgeModel[] = [];
   private nodesModel: NodeModel[] = [];
 
+  private autosave = false;
+
   constructor() {
     this.serviceModule = ServicesModule.getInstance();
   }
@@ -42,9 +45,7 @@ export class DesignerManager {
         y: 0,
         zoom: 1,
       })
-      .setTitle(
-        `Flow ${LocaleService.getInstance().formatNumericDate(new Date())}`
-      )
+      .setTitle(`Flow ${LocaleService.getInstance().formatDate(new Date())}`)
       .build();
 
     this.edgesModel = [];
@@ -165,12 +166,15 @@ export class DesignerManager {
     type: CustomNodeType,
     data: NodeData
   ): Promise<NodeModel> {
-    const nodeModel = NodeModel.build(
-      position,
-      type,
-      data,
-      this.flowModel?.uuid
-    );
+    let nodeModel = NodeModel.build(position, type, data, this.flowModel?.uuid);
+
+    if (this.autosave) {
+      nodeModel = await this.serviceModule
+        .getFlowService()
+        .createNode(nodeModel);
+
+      nodeModel = plainToInstance(NodeModel, nodeModel);
+    }
 
     this.nodesModel.push(nodeModel);
 
@@ -178,14 +182,84 @@ export class DesignerManager {
   }
 
   async createEdge(connection: Connection): Promise<EdgeModel> {
-    const edgeModel = EdgeModel.build(
+    let edgeModel = EdgeModel.build(
       connection,
       CustomEdgeType.CustomEdge,
       this.flowModel?.uuid
     );
 
+    if (this.autosave) {
+      edgeModel = await this.serviceModule
+        .getFlowService()
+        .createEdge(edgeModel);
+
+      edgeModel = plainToInstance(EdgeModel, edgeModel);
+    }
+
     this.edgesModel.push(edgeModel);
 
     return edgeModel;
+  }
+
+  async updateNodePosition(nodes: AppNode[]): Promise<void> {
+    this.nodesModel.forEach((current) => {
+      const update = nodes.find((each) => each.id === current.designerId);
+
+      if (update) {
+        current.position = update.position;
+      }
+    });
+
+    if (this.autosave) {
+      await this.serviceModule.getFlowService().updateNodes(this.nodesModel);
+    }
+  }
+
+  async newFlow(): Promise<FlowDTO> {
+    this.reset();
+
+    return this.createFlow({
+      flow: this.flowModel!,
+      edges: [],
+      nodes: [],
+    });
+  }
+
+  async setAutosave(value: boolean): Promise<Nullable<FlowModel>> {
+    this.autosave = value;
+
+    await this.serviceModule.getFlowService().setAutosave(value);
+
+    if (this.autosave && !this.flowModel?.uuid) {
+      return (
+        await this.createFlow({
+          flow: this.flowModel!,
+          nodes: [],
+          edges: [],
+        })
+      ).flow;
+    }
+
+    return this.flowModel;
+  }
+
+  async getAutosave(): Promise<boolean> {
+    const result = await this.serviceModule.getFlowService().getAutosave();
+
+    this.autosave = result;
+
+    return result;
+  }
+
+  private async createFlow(flowDto: FlowDTO): Promise<FlowDTO> {
+    const flow = await this.serviceModule.getFlowService().saveFlow({
+      flow: flowDto.flow,
+      nodes: Object.values(flowDto.nodes),
+      edges: Object.values(flowDto.edges),
+    });
+
+    this.flowModel = flow.flow;
+
+    return flow;
   }
 }

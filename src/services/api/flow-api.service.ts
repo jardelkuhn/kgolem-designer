@@ -35,4 +35,16 @@ export class APIFlowService implements FlowService {
   createNode(partial: Partial<NodeModel>): Promise<NodeModel> {
     throw new Error(`Method not implemented. ${partial}`);
   }
+  createEdge(partial: Partial<EdgeModel>): Promise<EdgeModel> {
+    throw new Error(`Method not implemented. ${partial}`);
+  }
+  updateNodes(nodes: NodeModel[]): Promise<NodeModel[]> {
+    throw new Error(`Method not implemented. ${nodes}`);
+  }
+  getAutosave(): Promise<boolean> {
+    throw new Error(`Method not implemented.`);
+  }
+  setAutosave(value: boolean): Promise<void> {
+    throw new Error(`Method not implemented. ${value}`);
+  }
 }

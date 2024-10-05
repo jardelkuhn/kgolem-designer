@@ -183,7 +183,6 @@ export class LocalStorageFlowService implements FlowService {
     const flow = (await this.listFlows()).find((f) => f.uuid === uuid);
 
     if (!flow) {
-      console.log(`Flow not found ${uuid}`);
       throw new Error(`Flow not found ${uuid}`);
     }
 
@@ -207,16 +206,6 @@ export class LocalStorageFlowService implements FlowService {
     this.storageService.setValue("edges-repository", edges);
   }
 
-  // async update(model: FlowModel): Promise<void> {
-  //   throw new Error("Method not implemented.");
-  // }
-
-  // async get(uuid: string): Promise<Nullable<FlowModel>> {
-  //   return (await this.list()).find((f) => f.uuid === uuid);
-  // }
-
-  // async delete(uuid: string): Promise<void> {}
-
   async createNode(partial: Partial<NodeModel>): Promise<NodeModel> {
     const uuid = crypto.randomUUID();
 
@@ -225,9 +214,61 @@ export class LocalStorageFlowService implements FlowService {
       type: partial.type ?? "default",
       position: partial.position ?? { x: 0, y: 0 },
       data: partial.data ?? { label: "unknown", options: [] },
-      designerId: uuid,
+      designerId: partial.designerId,
+      ref_flow: partial.ref_flow,
     } as NodeModel;
 
+    const storageNodes = await this.listNodes();
+
+    storageNodes.push(newNode);
+
+    this.storageService.setValue("nodes-repository", storageNodes);
+
     return newNode;
+  }
+
+  async createEdge(partial: Partial<EdgeModel>): Promise<EdgeModel> {
+    const uuid = crypto.randomUUID();
+
+    partial.uuid = uuid;
+
+    const newEdge = partial as EdgeModel;
+
+    const storageEdges = await this.listEdges();
+
+    storageEdges.push(newEdge);
+
+    this.storageService.setValue("edges-repository", storageEdges);
+
+    return newEdge;
+  }
+
+  async updateNodes(nodes: NodeModel[]): Promise<NodeModel[]> {
+    const storageNodes = await this.listNodes();
+
+    const updated = storageNodes.map((each) => {
+      const update = nodes.find((node) => node.uuid === each.uuid);
+
+      if (update) {
+        each.data = update.data;
+        each.position = update.position;
+      }
+
+      return each;
+    });
+
+    this.storageService.setValue("nodes-repository", updated);
+
+    return storageNodes;
+  }
+
+  async getAutosave(): Promise<boolean> {
+    const autosave = this.storageService.getValue<boolean>("autosave");
+
+    return !!autosave;
+  }
+
+  async setAutosave(value: boolean): Promise<void> {
+    this.storageService.setValue("autosave", value);
   }
 }

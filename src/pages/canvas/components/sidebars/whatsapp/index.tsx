@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 
 import { Aside, Description } from "./styles";
 import { useDnD } from "../../../../../context/dnd";
@@ -28,9 +28,7 @@ export function WhatsAppSidebar({
   onDelete,
 }: Props) {
   const { setType } = useDnD();
-  const { autoSave, setAutoSave, flows } = useDesigner();
-
-  const [checkedFlow, setCheckedFlow] = useState("");
+  const { autosave, flow, flows, handleAutosave, setFlow } = useDesigner();
 
   const onDragStart = (
     event: React.DragEvent<HTMLDivElement>,
@@ -40,8 +38,16 @@ export function WhatsAppSidebar({
     event.dataTransfer.effectAllowed = "move";
   };
 
-  const onLoad = () => {
-    onRestore(checkedFlow);
+  const handleRestore = () => {
+    if (flow?.uuid) {
+      onRestore(flow.uuid);
+    }
+  };
+
+  const handleDelete = () => {
+    if (flow?.uuid) {
+      onDelete(flow.uuid);
+    }
   };
 
   return (
@@ -65,26 +71,25 @@ export function WhatsAppSidebar({
         onDragStart={onDragStart}
       />
 
-      <Description>AUTOSAVE: {autoSave ? "ON" : "OFF"}</Description>
-      <button onClick={() => setAutoSave(!autoSave)}>TOGGLE AUTOSAVE</button>
+      <Description>AUTOSAVE: {autosave ? "ON" : "OFF"}</Description>
+      <button onClick={() => handleAutosave(!autosave)}>TOGGLE AUTOSAVE</button>
       <br />
       {flows.map((aa) => (
-        <div>
+        <div key={aa.uuid}>
           <input
-            key={aa.uuid}
             type="radio"
             title={aa.title}
             value={aa.uuid ?? ""}
-            checked={aa.uuid === checkedFlow}
-            onChange={() => setCheckedFlow(aa.uuid!)}
+            checked={aa.uuid === flow?.uuid}
+            onChange={() => setFlow(aa)}
           />
           <span style={{ color: "white" }}>{aa.title}</span>
         </div>
       ))}
       <button onClick={onCreate}>NEW</button>
       <button onClick={onSave}>SAVE</button>
-      <button onClick={onLoad}>LOAD</button>
-      <button onClick={() => onDelete(checkedFlow)}>delete</button>
+      <button onClick={handleRestore}>LOAD</button>
+      <button onClick={handleDelete}>delete</button>
     </Aside>
   );
 }

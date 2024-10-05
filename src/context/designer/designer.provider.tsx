@@ -27,6 +27,7 @@ import { useDnD } from "../dnd";
 import { DefaultProviderProps } from "../@interfaces";
 import { FlowModel } from "../../models";
 import { ManagersModule } from "../../managers/managers.module";
+import { Nullable } from "../../@types";
 
 interface DesignerContextProps {
   readonly nodeEntered?: AppNode;
@@ -34,8 +35,11 @@ interface DesignerContextProps {
   readonly edges: Edge[];
   readonly getHandles: () => JSX.Element[];
 
-  readonly autoSave: boolean;
-  readonly setAutoSave: (value: boolean) => void;
+  readonly autosave: boolean;
+  readonly handleAutosave: (value: boolean) => void;
+
+  readonly flow: Nullable<FlowModel>;
+  readonly setFlow: (value: Nullable<FlowModel>) => void;
 
   readonly flows: FlowModel[];
 }
@@ -43,15 +47,16 @@ interface DesignerContextProps {
 export const DesignerContext = React.createContext<DesignerContextProps>(null!);
 
 export function DesignerProvider(props: DefaultProviderProps) {
-  const designerService = ManagersModule.getInstance().getDesignerManager();
+  const designerManager = ManagersModule.getInstance().getDesignerManager();
 
   const reactFlowWrapper = useRef(null);
 
-  const [autoSave, setAutoSave] = useState(false);
+  const [autosave, setAutosave] = useState(false);
   const [colorMode] = useState<ColorMode>("dark");
   const [rfInstance, setRfInstance] = useState<ReactFlowInstance<AppNode>>();
 
   // remove it from here
+  const [flow, setFlow] = useState<Nullable<FlowModel>>();
   const [flows, setFlows] = useState<FlowModel[]>([]);
   // remove it from here
 
@@ -69,18 +74,24 @@ export function DesignerProvider(props: DefaultProviderProps) {
 
   const onConnect: OnConnect = useCallback(
     async (connection) => {
-      const edge = await designerService.createEdge(connection);
+      const edge = await designerManager.createEdge(connection);
 
       setEdges((edges) => addEdge(edge.toInstance(), edges));
     },
-    [designerService, setEdges]
+    [designerManager, setEdges]
   );
 
   const loadData = useCallback(async () => {
-    const flows = await designerService.listFlows();
+    // loadFlows
+    const flows = await designerManager.listFlows();
 
+    setFlow(undefined);
     setFlows(flows);
-  }, [designerService]);
+
+    // load autosave
+    const autosavePreference = await designerManager.getAutosave();
+    setAutosave(autosavePreference);
+  }, [designerManager]);
 
   const onNodeMouseEnter = (_event: unknown, node: AppNode) =>
     setNodeEntered(node);
@@ -113,43 +124,44 @@ export function DesignerProvider(props: DefaultProviderProps) {
         y: event.clientY,
       });
 
-      const newNode = await designerService.createNode(position, type, {
+      const newNode = await designerManager.createNode(position, type, {
         label: `${type} node`,
         options: [],
       });
 
       setNodes((nds) => nds.concat(newNode.toInstance()));
     },
-    [designerService, screenToFlowPosition, setNodes, type]
+    [designerManager, screenToFlowPosition, setNodes, type]
   );
 
   const onSave = useCallback(async () => {
     if (rfInstance) {
       const flow = rfInstance.toObject();
 
-      await designerService.save(flow);
+      await designerManager.save(flow);
 
       loadData();
     }
-  }, [designerService, rfInstance, loadData]);
+  }, [designerManager, rfInstance, loadData]);
 
   const onDelete = useCallback(
     async (uuid: string) => {
-      await designerService.deleteFlow(uuid);
+      await designerManager.deleteFlow(uuid);
 
       setNodes([]);
       setEdges([]);
 
+      setFlow((current) => (current?.uuid !== uuid ? current : undefined));
       setFlows((current) => current.filter((f) => f.uuid !== uuid));
     },
-    [designerService, setEdges, setNodes]
+    [designerManager, setEdges, setNodes]
   );
 
   const onRestore = useCallback(
     (uuid: string) => {
       const restoreFlow = async (uuid: string) => {
-        const { flow, nodes, edges } = await designerService.loadFlow(uuid);
-        console.log(nodes);
+        const { flow, nodes, edges } = await designerManager.loadFlow(uuid);
+
         if (flow) {
           setNodes(nodes.map((n) => n.toInstance()));
           setEdges(
@@ -171,7 +183,7 @@ export function DesignerProvider(props: DefaultProviderProps) {
 
       restoreFlow(uuid);
     },
-    [designerService, setEdges, setNodes, setViewport]
+    [designerManager, setEdges, setNodes, setViewport]
   );
 
   const getHandles = useCallback((): JSX.Element[] => {
@@ -183,31 +195,83 @@ export function DesignerProvider(props: DefaultProviderProps) {
   const onInit = (reactFlowInstance: ReactFlowInstance<AppNode>): void => {
     setRfInstance(reactFlowInstance);
 
-    designerService.reset();
+    designerManager.reset();
   };
 
-  const onNewFlow = () => {
-    designerService.reset();
+  const onNewFlow = async () => {
+    designerManager.reset();
+    const autosavedFlow = await designerManager.newFlow();
 
+    setFlow(autosavedFlow.flow);
+    setFlows((current) => [...current, autosavedFlow.flow]);
     setNodes([]);
     setEdges([]);
   };
 
+  const onNodeDragStop = async (
+    _event: React.MouseEvent,
+    _node: AppNode,
+    nodes: AppNode[]
+  ) => {
+    await designerManager.updateNodePosition(nodes);
+  };
+
+  const handleAutosave = useCallback(
+    async (value: boolean) => {
+      await designerManager.setAutosave(value);
+      setAutosave(value);
+    },
+    [designerManager]
+  );
+
   useEffect(() => {
     loadData();
   }, [loadData]);
+
+  useEffect(() => {
+    const save = async (value: boolean) => {
+      if (value) {
+        const autosavedFlow = await designerManager.setAutosave(value);
+
+        if (autosavedFlow) {
+          setFlow((current) =>
+            current?.uuid !== autosavedFlow.uuid ? autosavedFlow : current
+          );
+
+          setFlows((current) => [
+            ...current.filter((each) => each.uuid !== autosavedFlow.uuid),
+            autosavedFlow,
+          ]);
+        }
+      }
+    };
+
+    save(autosave);
+  }, [autosave, designerManager, setFlow, setFlows]);
 
   const value = useMemo(
     () => ({
       nodeEntered,
       connectStartParams,
       edges,
-      autoSave,
+      autosave,
+      flow,
       flows,
+      setFlow,
       getHandles,
-      setAutoSave,
+      handleAutosave,
     }),
-    [nodeEntered, connectStartParams, edges, autoSave, flows, getHandles]
+    [
+      nodeEntered,
+      connectStartParams,
+      edges,
+      autosave,
+      flow,
+      flows,
+      setFlow,
+      getHandles,
+      handleAutosave,
+    ]
   );
 
   return (
@@ -225,6 +289,7 @@ export function DesignerProvider(props: DefaultProviderProps) {
             edgeTypes={edgeTypes}
             onNodesChange={onNodesChange}
             onEdgesChange={onEdgesChange}
+            onNodeDragStop={onNodeDragStop}
             onNodeMouseEnter={onNodeMouseEnter}
             onNodeMouseLeave={onNodeMouseLeave}
             onConnectStart={onConnectStart}
