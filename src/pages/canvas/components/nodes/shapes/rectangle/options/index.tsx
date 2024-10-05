@@ -2,7 +2,8 @@ import { Position } from "@xyflow/react";
 
 import { OptionContainer, OptionLabel } from "../styles";
 import { CustomHandle } from "../../../../handles/custom";
-import { ColorProps, NodeOption } from "../../../@interfaces";
+import { ColorProps } from "../../../@interfaces";
+import { NodeOption } from "../../../../../../../models";
 
 interface Props {
   readonly nodeId: string;
@@ -18,8 +19,8 @@ export function RectangleOption(props: Props) {
     <OptionContainer color={color}>
       <OptionLabel>{option.label}</OptionLabel>
       <CustomHandle
-        id={option.id}
-        key={"id"}
+        id={option.designerId}
+        key={option.designerId}
         parentId={nodeId}
         type="source"
         position={Position.Right}
