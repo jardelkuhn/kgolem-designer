@@ -225,6 +225,28 @@ export class DesignerManager {
     });
   }
 
+  async deleteNodes(nodes: string[]) {
+    this.nodesModel = this.nodesModel.filter(
+      (current) =>
+        !nodes.find((designerId) => designerId === current.designerId)
+    );
+
+    await this.serviceModule
+      .getFlowService()
+      .deleteNodes(this.nodesModel.map((n) => n.uuid!));
+  }
+
+  async deleteEdges(edges: string[]) {
+    this.edgesModel = this.edgesModel.filter(
+      (current) =>
+        !edges.find((designerId) => designerId === current.designerId)
+    );
+
+    await this.serviceModule
+      .getFlowService()
+      .deleteEdges(this.edgesModel.map((e) => e.uuid!));
+  }
+
   async setAutosave(value: boolean): Promise<Nullable<FlowModel>> {
     this.autosave = value;
 

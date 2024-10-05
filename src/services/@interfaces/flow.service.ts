@@ -18,6 +18,9 @@ export interface FlowService {
   createEdge(partial: Partial<EdgeModel>): Promise<EdgeModel>;
 
   updateNodes(nodes: NodeModel[]): Promise<NodeModel[]>;
+  deleteNodes(nodes: string[]): Promise<void>;
+
+  deleteEdges(edges: string[]): Promise<void>;
 
   setAutosave(value: boolean): Promise<void>;
   getAutosave(): Promise<boolean>;

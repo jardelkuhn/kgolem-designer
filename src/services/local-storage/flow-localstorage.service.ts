@@ -262,6 +262,26 @@ export class LocalStorageFlowService implements FlowService {
     return storageNodes;
   }
 
+  async deleteNodes(nodes: string[]): Promise<void> {
+    const storageNodes = await this.listNodes();
+
+    const updated = storageNodes.filter(
+      (sn) => !!nodes.find((n) => n === sn.uuid)
+    );
+
+    this.storageService.setValue("nodes-repository", updated);
+  }
+
+  async deleteEdges(edges: string[]): Promise<void> {
+    const storageEdges = await this.listEdges();
+
+    const updated = storageEdges.filter(
+      (se) => !!edges.find((e) => e === se.uuid)
+    );
+
+    this.storageService.setValue("edges-repository", updated);
+  }
+
   async getAutosave(): Promise<boolean> {
     const autosave = this.storageService.getValue<boolean>("autosave");
 

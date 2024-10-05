@@ -47,4 +47,10 @@ export class APIFlowService implements FlowService {
   setAutosave(value: boolean): Promise<void> {
     throw new Error(`Method not implemented. ${value}`);
   }
+  deleteNodes(nodes: string[]): Promise<void> {
+    throw new Error(`Method not implemented. ${nodes}`);
+  }
+  deleteEdges(edges: string[]): Promise<void> {
+    throw new Error(`Method not implemented. ${edges}`);
+  }
 }

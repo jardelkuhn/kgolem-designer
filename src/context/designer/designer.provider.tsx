@@ -134,7 +134,7 @@ export function DesignerProvider(props: DefaultProviderProps) {
     [designerManager, screenToFlowPosition, setNodes, type]
   );
 
-  const onSave = useCallback(async () => {
+  const handleFlowSave = useCallback(async () => {
     if (rfInstance) {
       const flow = rfInstance.toObject();
 
@@ -144,7 +144,7 @@ export function DesignerProvider(props: DefaultProviderProps) {
     }
   }, [designerManager, rfInstance, loadData]);
 
-  const onDelete = useCallback(
+  const handleFlowDelete = useCallback(
     async (uuid: string) => {
       await designerManager.deleteFlow(uuid);
 
@@ -157,7 +157,7 @@ export function DesignerProvider(props: DefaultProviderProps) {
     [designerManager, setEdges, setNodes]
   );
 
-  const onRestore = useCallback(
+  const handleFlowRestore = useCallback(
     (uuid: string) => {
       const restoreFlow = async (uuid: string) => {
         const { flow, nodes, edges } = await designerManager.loadFlow(uuid);
@@ -198,7 +198,7 @@ export function DesignerProvider(props: DefaultProviderProps) {
     designerManager.reset();
   };
 
-  const onNewFlow = async () => {
+  const handleNewFlow = async () => {
     designerManager.reset();
     const autosavedFlow = await designerManager.newFlow();
 
@@ -223,6 +223,24 @@ export function DesignerProvider(props: DefaultProviderProps) {
     },
     [designerManager]
   );
+
+  const onDelete = async ({
+    nodes,
+    edges,
+  }: {
+    nodes: AppNode[];
+    edges: Edge[];
+  }) => {
+    if (nodes.length > 0) {
+      const designerIds = nodes.map((n) => n.id);
+      await designerManager.deleteNodes(designerIds);
+    }
+
+    if (edges.length > 0) {
+      const designerIds = edges.map((e) => e.id);
+      await designerManager.deleteEdges(designerIds);
+    }
+  };
 
   useEffect(() => {
     loadData();
@@ -298,15 +316,16 @@ export function DesignerProvider(props: DefaultProviderProps) {
             colorMode={colorMode}
             onDrop={onDrop}
             onDragOver={onDragOver}
+            onDelete={onDelete}
           >
             {props.children}
           </ReactFlow>
         </ReactFlowWrapper>
         <WhatsAppSidebar
-          onSave={onSave}
-          onCreate={onNewFlow}
-          onRestore={onRestore}
-          onDelete={onDelete}
+          onSave={handleFlowSave}
+          onCreate={handleNewFlow}
+          onRestore={handleFlowRestore}
+          onDelete={handleFlowDelete}
         />
       </Container>
     </DesignerContext.Provider>
