@@ -16,26 +16,11 @@ export class EdgeModel {
 
   designerId: string;
 
-  constructor(
-    uuid: Nullable<string>,
-    source: string,
-    sourceHandle: Nullable<string>,
-    target: string,
-    targetHandle: Nullable<string>,
-    animated: Nullable<boolean>,
-    type: CustomEdgeType,
-    ref_flow: Nullable<string>,
-    designerId: string
-  ) {
-    this.uuid = uuid;
+  constructor(source: string, target: string, type: CustomEdgeType) {
     this.source = source;
-    this.sourceHandle = sourceHandle;
     this.target = target;
-    this.targetHandle = targetHandle;
-    this.animated = animated;
     this.type = type;
-    this.ref_flow = ref_flow;
-    this.designerId = designerId;
+    this.designerId = crypto.randomUUID();
   }
 
   static build(
@@ -43,17 +28,12 @@ export class EdgeModel {
     type: CustomEdgeType,
     flowUuid: Nullable<string>
   ) {
-    const model = new EdgeModel(
-      undefined,
-      connection.source,
-      connection.sourceHandle,
-      connection.target,
-      connection.targetHandle,
-      true,
-      type,
-      flowUuid,
-      crypto.randomUUID()
-    );
+    const model = new EdgeModel(connection.source, connection.target, type);
+
+    model.sourceHandle = connection.sourceHandle;
+    model.targetHandle = connection.targetHandle;
+    model.animated = true;
+    model.ref_flow = flowUuid;
 
     return model;
   }

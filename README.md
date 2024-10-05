@@ -76,10 +76,8 @@ Learn:
 - [React Flow – Layouting](https://reactflow.dev/learn/layouting/layouting)
 
 ### TODO
-- Persistence service [localstorage, api]
+- Persistence service [api]
 - Export[json, png]
 - Node options CRUD
 - Node description input
 - Design name
-- HOC for DnD
-- HOC for sidebar

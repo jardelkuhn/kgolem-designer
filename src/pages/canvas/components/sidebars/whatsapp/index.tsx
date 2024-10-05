@@ -13,20 +13,14 @@ import { CustomNodeType } from "../../nodes/@interfaces";
 import { WAPlainTextDnD } from "../../nodes/wa/plain-text/dnd";
 import { WAOptionsDnD } from "../../nodes/wa/options/dnd";
 import { useDesigner } from "../../../../../context/designer";
-
-interface Props {
-  onSave: () => void;
-  onCreate: () => void;
-  onRestore: (uuid: string) => void;
-  onDelete: (uuid: string) => void;
-}
+import { SidebarProps } from "../@interfaces";
 
 export function WhatsAppSidebar({
   onSave,
   onCreate,
   onRestore,
   onDelete,
-}: Props) {
+}: SidebarProps) {
   const { setType } = useDnD();
   const { autosave, flow, flows, handleAutosave, setFlow } = useDesigner();
 

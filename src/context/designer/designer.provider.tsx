@@ -242,12 +242,8 @@ export function DesignerProvider(props: DefaultProviderProps) {
     }
   };
 
-  useEffect(() => {
-    loadData();
-  }, [loadData]);
-
-  useEffect(() => {
-    const save = async (value: boolean) => {
+  const toggleAutosave = useCallback(
+    async (value: boolean) => {
       if (value) {
         const autosavedFlow = await designerManager.setAutosave(value);
 
@@ -262,10 +258,17 @@ export function DesignerProvider(props: DefaultProviderProps) {
           ]);
         }
       }
-    };
+    },
+    [designerManager]
+  );
 
-    save(autosave);
-  }, [autosave, designerManager, setFlow, setFlows]);
+  useEffect(() => {
+    loadData();
+  }, [loadData]);
+
+  useEffect(() => {
+    toggleAutosave(autosave);
+  }, [autosave, designerManager, setFlow, setFlows, toggleAutosave]);
 
   const value = useMemo(
     () => ({
