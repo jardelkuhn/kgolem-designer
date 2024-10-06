@@ -5,17 +5,25 @@ import { useDnD } from "../../../../../context/dnd";
 import { WAStartDnD } from "../../nodes/wa/start/dnd";
 import { waColors } from "../../nodes/_utilities/colors";
 import {
-  waAwaitUserInputParams,
+  waAwaitTextParams,
+  waDocumentParams,
+  waImageParams,
   waOptionsParams,
   waPlainTextParams,
   waStartParams,
+  waTemplateParams,
+  waVideoParams,
 } from "../../nodes/_utilities/params";
 import { CustomNodeType } from "../../nodes/@interfaces";
 import { WAPlainTextDnD } from "../../nodes/wa/plain-text/dnd";
 import { WAOptionsDnD } from "../../nodes/wa/options/dnd";
 import { useDesigner } from "../../../../../context/designer";
 import { SidebarProps } from "../@interfaces";
-import { WAAwaitUserInputDnd } from "../../nodes/wa/await-user-input/dnd";
+import { WAAwaitTextDnd } from "../../nodes/wa/await-text/dnd";
+import { WAImageDnD } from "../../nodes/wa/image/dnd";
+import { WAVideoDnD } from "../../nodes/wa/video/dnd";
+import { WADocumentDnD } from "../../nodes/wa/document/dnd";
+import { WATemplateDnD } from "../../nodes/wa/template/dnd";
 
 export function WhatsAppSidebar({
   onSave,
@@ -51,14 +59,38 @@ export function WhatsAppSidebar({
       <Description>
         You can drag these nodes to the pane on the left
       </Description>
+      <br />
+      <Description>Events</Description>
       <WAStartDnD
         color={waColors}
         params={waStartParams}
         onDragStart={onDragStart}
       />
+      <WAAwaitTextDnd
+        color={waColors}
+        params={waAwaitTextParams}
+        onDragStart={onDragStart}
+      />
+      <br />
+      <Description>Actions</Description>
       <WAPlainTextDnD
         color={waColors}
         params={waPlainTextParams}
+        onDragStart={onDragStart}
+      />
+      <WAImageDnD
+        color={waColors}
+        params={waImageParams}
+        onDragStart={onDragStart}
+      />
+      <WAVideoDnD
+        color={waColors}
+        params={waVideoParams}
+        onDragStart={onDragStart}
+      />
+      <WADocumentDnD
+        color={waColors}
+        params={waDocumentParams}
         onDragStart={onDragStart}
       />
       <WAOptionsDnD
@@ -66,15 +98,15 @@ export function WhatsAppSidebar({
         params={waOptionsParams}
         onDragStart={onDragStart}
       />
-      <WAAwaitUserInputDnd
+      <WATemplateDnD
         color={waColors}
-        params={waAwaitUserInputParams}
+        params={waTemplateParams}
         onDragStart={onDragStart}
       />
-
       <Description>AUTOSAVE: {autosave ? "ON" : "OFF"}</Description>
       <button onClick={() => handleAutosave(!autosave)}>TOGGLE AUTOSAVE</button>
       <br />
+      <Description>My flows</Description>
       {flows.map((aa) => (
         <div key={aa.uuid}>
           <input

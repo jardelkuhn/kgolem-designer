@@ -2,9 +2,9 @@ import { NodeProps } from "@xyflow/react";
 
 import { fonts, textFont } from "../../../_utilities/colors";
 import withCircleShape from "../../../shapes/circle/node";
-import { WAAwaitUserInputNodeType } from "../../types";
+import { WAAwaitTextNodeType } from "../../types";
 
-function AwaitUserInput({ data }: NodeProps<WAAwaitUserInputNodeType>) {
+function AwaitText({ data }: NodeProps<WAAwaitTextNodeType>) {
   return (
     <span style={{ ...fonts, fontSize: textFont.description }}>
       {data.label}
@@ -12,4 +12,4 @@ function AwaitUserInput({ data }: NodeProps<WAAwaitUserInputNodeType>) {
   );
 }
 
-export const WAAwaitUserInputNode = withCircleShape(AwaitUserInput);
+export const WAAwaitTextNode = withCircleShape(AwaitText);

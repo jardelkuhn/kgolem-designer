@@ -4,7 +4,11 @@ import {
   waStartParams,
   waOptionsParams,
   fallbackNodeParams,
-  waAwaitUserInputParams,
+  waAwaitTextParams,
+  waImageParams,
+  waVideoParams,
+  waDocumentParams,
+  waTemplateParams,
 } from "../params";
 
 class NodeParamsFactory {
@@ -19,8 +23,20 @@ class NodeParamsFactory {
       case CustomNodeType.WAOptions:
         return waOptionsParams;
 
-      case CustomNodeType.WAAwaitUserInput:
-        return waAwaitUserInputParams;
+      case CustomNodeType.WAAwaitText:
+        return waAwaitTextParams;
+
+      case CustomNodeType.WAImage:
+        return waImageParams;
+
+      case CustomNodeType.WAVideo:
+        return waVideoParams;
+
+      case CustomNodeType.WADocument:
+        return waDocumentParams;
+
+      case CustomNodeType.WATemplate:
+        return waTemplateParams;
     }
 
     return fallbackNodeParams;

@@ -5,6 +5,18 @@ import { NodeData } from "../../../../../models";
 export type WAStartNodeType = Node<NodeData, "WAStart">;
 export type WAPlainTextNodeType = Node<NodeData, "WAPlainText">;
 export type WAOptionsNodeType = Node<NodeData, "WAOptions">;
-export type WAAwaitUserInputNodeType = Node<NodeData, "WAAwaitUserInput">;
+export type WAAwaitTextNodeType = Node<NodeData, "WAAwaitText">;
+export type WAImageNodeType = Node<NodeData, "WAImage">;
+export type WAVideoNodeType = Node<NodeData, "WAVideo">;
+export type WADocumentNodeType = Node<NodeData, "WADocument">;
+export type WATemplateNodeType = Node<NodeData, "WATemplate">;
 
-export type WANode = WAStartNodeType | WAPlainTextNodeType | WAOptionsNodeType | WAAwaitUserInputNodeType;
+export type WANode =
+  | WAStartNodeType
+  | WAPlainTextNodeType
+  | WAOptionsNodeType
+  | WAAwaitTextNodeType
+  | WAImageNodeType
+  | WAVideoNodeType
+  | WADocumentNodeType
+  | WATemplateNodeType;

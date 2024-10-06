@@ -9,9 +9,11 @@ export const Aside = styled.aside`
   display: flex;
   flex-direction: column;
   align-items: center;
+  overflow-y: scroll;
 `;
 
 export const Description = styled.div`
   color: #ffffff;
   margin-bottom: 10px;
+  font-weight: 700;
 `;
