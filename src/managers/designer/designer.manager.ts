@@ -155,10 +155,9 @@ export class DesignerManager {
 
   async createNode(
     position: XYPosition,
-    type: CustomNodeType,
-    data: NodeData
+    type: CustomNodeType
   ): Promise<NodeModel> {
-    let nodeModel = NodeModel.build(position, type, data, this.flowModel?.uuid);
+    let nodeModel = NodeModel.build(position, type, this.flowModel?.uuid);
 
     if (this.autosave) {
       nodeModel = await this.serviceModule
@@ -245,7 +244,7 @@ export class DesignerManager {
     if (node) {
       let option = {
         designerId: crypto.randomUUID(),
-        label: "Option",
+        label: `Option ${node.data.options.length + 1}`,
         nodeUuid: node.uuid,
         nodeDesignerId: node.designerId,
       } as NodeOption;
@@ -278,6 +277,26 @@ export class DesignerManager {
         await this.serviceModule.getFlowService().deleteNodeOption(option);
       }
     }
+  }
+
+  async updateNodeData(nodeId: string, data: NodeData): Promise<NodeModel> {
+    const node = this.nodesModel.find((n) => n.designerId === nodeId);
+
+    if (node) {
+      node.data = data;
+
+      if (this.autosave) {
+        const result = await this.serviceModule
+          .getFlowService()
+          .updateNodes([node]);
+
+        return result[0];
+      }
+
+      return node;
+    }
+
+    throw Error(`Node not found ${nodeId}`);
   }
 
   async setAutosave(value: boolean): Promise<Nullable<FlowModel>> {

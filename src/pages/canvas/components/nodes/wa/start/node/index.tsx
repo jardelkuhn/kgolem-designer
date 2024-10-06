@@ -7,7 +7,7 @@ import withCircleShape from "../../../shapes/circle/node";
 function StartNode({ data }: NodeProps<WAStartNodeType>) {
   return (
     <span style={{ ...fonts, fontSize: textFont.description }}>
-      {data.label}
+      {data.text}
     </span>
   );
 }

@@ -21,7 +21,7 @@
 
 </div>
 
-![](https://github.com/jackanakin/jackchat-canvas/blob/main/history/components/05102024.png?raw=true)
+![](https://github.com/jackanakin/kgolem-designer/blob/main/history/components/06102024.png?raw=true)
 
 ## Getting up and running
 
@@ -78,9 +78,7 @@ Learn:
 ### TODO
 - Persistence service [api]
 - Export[json, png]
-- Node options CRUD
-- Node description input
-- Design name
+- Node options CRUD (modal, editors)
 - refactor uuid? props to Partial<>
 - improve errors and exceptions thrown
 - edges cleanup

@@ -19,7 +19,7 @@ export interface NodeOption {
 }
 
 export type NodeData = {
-  readonly label: string;
+  readonly text: string;
   readonly options: NodeOption[];
 };
 
@@ -52,14 +52,19 @@ export class NodeModel {
   static build(
     position: XYPosition,
     type: CustomNodeType,
-    data: NodeData,
-    flowUuid: Nullable<string>
+    flowUuid: Nullable<string>,
+    data?: NodeData
   ): NodeModel {
+    const defaultData: NodeData = {
+      text: "",
+      options: [],
+    };
+
     const model = new NodeModel(
       undefined,
       type,
       position,
-      data,
+      data ?? defaultData,
       flowUuid,
       crypto.randomUUID()
     );

@@ -10,6 +10,7 @@ export const waPlainTextParams: NodeParams = {
   familyIcon: "bi bi-body-text",
   provider: waParams,
   type: CustomNodeType.WAPlainText,
+  textContent: true,
 };
 
 export const waStartParams: NodeParams = {
@@ -17,6 +18,7 @@ export const waStartParams: NodeParams = {
   familyIcon: "bi bi-lightning-fill",
   provider: waParams,
   type: CustomNodeType.WAStart,
+  textContent: true,
 };
 
 export const waOptionsParams: NodeParams = {
@@ -24,6 +26,8 @@ export const waOptionsParams: NodeParams = {
   familyIcon: "bi bi-list-task",
   provider: waParams,
   type: CustomNodeType.WAOptions,
+  textContent: true,
+  customContent: true,
 };
 
 export const waAwaitTextParams: NodeParams = {
@@ -31,6 +35,7 @@ export const waAwaitTextParams: NodeParams = {
   familyIcon: "bi bi-chat-right-dots",
   provider: waParams,
   type: CustomNodeType.WAAwaitText,
+  textContent: true,
 };
 
 export const waImageParams: NodeParams = {
@@ -38,6 +43,7 @@ export const waImageParams: NodeParams = {
   familyIcon: "bi bi-image",
   provider: waParams,
   type: CustomNodeType.WAImage,
+  textContent: true,
 };
 
 export const waVideoParams: NodeParams = {
@@ -45,6 +51,7 @@ export const waVideoParams: NodeParams = {
   familyIcon: "bi bi-file-play",
   provider: waParams,
   type: CustomNodeType.WAVideo,
+  textContent: true,
 };
 
 export const waDocumentParams: NodeParams = {
@@ -52,6 +59,7 @@ export const waDocumentParams: NodeParams = {
   familyIcon: "bi bi-file-text",
   provider: waParams,
   type: CustomNodeType.WADocument,
+  textContent: true,
 };
 
 export const waTemplateParams: NodeParams = {
@@ -59,4 +67,5 @@ export const waTemplateParams: NodeParams = {
   familyIcon: "bi bi-journal",
   provider: waParams,
   type: CustomNodeType.WATemplate,
+  textContent: true,
 };

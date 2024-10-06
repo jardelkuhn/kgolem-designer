@@ -17,7 +17,7 @@ export const Container = styled.div<Props>`
   min-height: 75px;
   height: auto;
 
-  border: 2px solid transparent; /* Make the border initially transparent */
+  border: 2px solid transparent;
   background: ${(props) => props.color.background};
 
   display: flex;
@@ -69,6 +69,7 @@ export const MainWrapper = styled.div<Props>`
   height: auto;
   display: flex;
   justify-content: center;
+  flex-direction: column;
   position: relative; /* Needed for absolute positioning of the pseudo-element */
 
   /* Keeps space for the border */
@@ -177,4 +178,32 @@ export const AddOptionContainer = styled(OptionContainer)<CrudProps>`
   display: flex;
   flex-direction: column;
   cursor: ${(props) => (props.loading === "yes" ? "wait" : "pointer")};
+`;
+
+export const RectangleTextArea = styled.textarea`
+  width: 100%;
+  height: 100%;
+  height: 60px;
+  padding: 7px;
+  box-sizing: border-box;
+  font-size: 5px;
+  background: transparent;
+
+  resize: none;
+  border: none;
+  outline: none;
+`;
+
+export const RectangleOptionInput = styled.input`
+  width: 100%;
+  height: 100%;
+  height: 15px;
+  padding-left: 5px;
+  box-sizing: border-box;
+  font-size: 5px;
+  background: transparent;
+
+  resize: none;
+  border: none;
+  outline: none;
 `;

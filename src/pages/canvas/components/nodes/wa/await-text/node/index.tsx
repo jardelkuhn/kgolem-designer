@@ -7,7 +7,7 @@ import { WAAwaitTextNodeType } from "../../types";
 function AwaitText({ data }: NodeProps<WAAwaitTextNodeType>) {
   return (
     <span style={{ ...fonts, fontSize: textFont.description }}>
-      {data.label}
+      {data.text}
     </span>
   );
 }

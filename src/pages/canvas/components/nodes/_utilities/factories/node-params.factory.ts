@@ -12,7 +12,7 @@ import {
 } from "../params";
 
 class NodeParamsFactory {
-  static create(type?: string): NodeParams {
+  static get(type?: string): NodeParams {
     switch (type) {
       case CustomNodeType.WAPlainText:
         return waPlainTextParams;

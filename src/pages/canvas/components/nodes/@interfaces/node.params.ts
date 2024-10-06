@@ -5,6 +5,9 @@ export interface NodeParams {
   familyIcon: string;
   type: CustomNodeType;
 
+  textContent: boolean;
+  customContent?: boolean;
+
   provider: ProviderParams;
 }
 

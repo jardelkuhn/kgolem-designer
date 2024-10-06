@@ -16,7 +16,7 @@ function ImageNode({ data }: NodeProps<WAImageNodeType>) {
         <RectangleContentDescription
           style={{ ...fonts, fontSize: textFont.description }}
         >
-          {data.label}
+          {data.text}
         </RectangleContentDescription>
       </RectangleContentLabelWrapper>
     </RectangleContentContainer>

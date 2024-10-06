@@ -45,6 +45,13 @@ interface DesignerContextProps {
 
   readonly addOption: (designerId: string) => Promise<void>;
   readonly deleteOption: (option: NodeOption) => Promise<void>;
+  readonly handleNodeOptionText: (
+    nodeId: string,
+    optionId: string,
+    text: string
+  ) => Promise<void>;
+
+  readonly handleNodeText: (nodeId: string, text: string) => Promise<void>;
 }
 
 export const DesignerContext = React.createContext<DesignerContextProps>(null!);
@@ -127,10 +134,7 @@ export function DesignerProvider(props: DefaultProviderProps) {
         y: event.clientY,
       });
 
-      const newNode = await designerManager.createNode(position, type, {
-        label: `${type} node`,
-        options: [],
-      });
+      const newNode = await designerManager.createNode(position, type);
 
       setNodes((nds) => nds.concat(newNode.toInstance()));
     },
@@ -308,6 +312,44 @@ export function DesignerProvider(props: DefaultProviderProps) {
     [designerManager, nodes, setNodes]
   );
 
+  const handleNodeText = useCallback(
+    async (nodeId: string, text: string) => {
+      const node = nodes.find((n) => n.id === nodeId);
+
+      if (node) {
+        node.data = { options: node?.data.options, text: text };
+
+        await designerManager.updateNodeData(nodeId, node.data);
+
+        setNodes((current) => {
+          return [...current.filter((n) => n.id !== nodeId), node];
+        });
+      }
+    },
+    [designerManager, nodes, setNodes]
+  );
+
+  const handleNodeOptionText = useCallback(
+    async (nodeId: string, optionId: string, text: string) => {
+      const node = nodes.find((n) => n.id === nodeId);
+
+      if (node) {
+        const option = node.data.options.find((o) => o.designerId === optionId);
+
+        if (option) {
+          option.label = text;
+
+          await designerManager.updateNodeData(nodeId, node.data);
+
+          setNodes((current) => {
+            return [...current.filter((n) => n.id !== nodeId), node];
+          });
+        }
+      }
+    },
+    [designerManager, nodes, setNodes]
+  );
+
   useEffect(() => {
     loadData();
   }, [loadData]);
@@ -327,8 +369,10 @@ export function DesignerProvider(props: DefaultProviderProps) {
       setFlow,
       getHandles,
       addOption,
+      handleNodeText,
       handleAutosave,
       deleteOption,
+      handleNodeOptionText,
     }),
     [
       nodeEntered,
@@ -339,8 +383,10 @@ export function DesignerProvider(props: DefaultProviderProps) {
       flows,
       getHandles,
       addOption,
+      handleNodeText,
       handleAutosave,
       deleteOption,
+      handleNodeOptionText,
     ]
   );
 
