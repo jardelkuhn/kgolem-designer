@@ -11,14 +11,16 @@ export interface Position {
 
 export interface NodeOption {
   uuid?: string;
+  nodeUuid?: Nullable<string>;
   label: string;
 
   designerId: string;
+  nodeDesignerId: string;
 }
 
 export type NodeData = {
   readonly label: string;
-  readonly options?: NodeOption[];
+  readonly options: NodeOption[];
 };
 
 export class NodeModel {

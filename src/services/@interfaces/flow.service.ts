@@ -1,11 +1,7 @@
-import { EdgeModel, FlowModel, NodeModel } from "../../models";
+import { EdgeModel, FlowModel, NodeModel, NodeOption } from "../../models";
 import { FlowDTO } from "../@types";
 
 export interface FlowService {
-  // get(uuid: string): Promise<Nullable<FlowModel>>;
-  // update(model: FlowModel): Promise<void>;
-  // delete(uuid: string): Promise<void>;
-
   listFlows(): Promise<FlowModel[]>;
   listNodes(): Promise<NodeModel[]>;
   listEdges(): Promise<EdgeModel[]>;
@@ -17,6 +13,8 @@ export interface FlowService {
   createNode(partial: Partial<NodeModel>): Promise<NodeModel>;
   createEdge(partial: Partial<EdgeModel>): Promise<EdgeModel>;
 
+  addNodeOption(option: NodeOption): Promise<NodeOption>;
+  deleteNodeOption(option: NodeOption): Promise<void>;
   updateNodes(nodes: NodeModel[]): Promise<NodeModel[]>;
   deleteNodes(nodes: string[]): Promise<void>;
 

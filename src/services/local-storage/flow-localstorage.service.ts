@@ -1,6 +1,6 @@
 import { plainToInstance } from "class-transformer";
 
-import { EdgeModel, FlowModel, NodeModel } from "../../models";
+import { EdgeModel, FlowModel, NodeModel, NodeOption } from "../../models";
 import { FlowService } from "../@interfaces";
 import { FlowDTO } from "../@types";
 import { LocalStorageService } from "./repository";
@@ -88,6 +88,11 @@ export class LocalStorageFlowService implements FlowService {
     updateNodes.forEach((update) => {
       const storedNode = storageNodes.find((s) => s.uuid === update.uuid);
       if (storedNode) {
+        if (update.data.options.length > 0) {
+          update.data.options.forEach(
+            (o) => (o.uuid = o.uuid ?? crypto.randomUUID())
+          );
+        }
         storedNode.data = update.data;
         storedNode.position = update.position;
         storedNode.type = update.type;
@@ -96,7 +101,7 @@ export class LocalStorageFlowService implements FlowService {
 
     // add new nodes
     newNodes.forEach((nw) => {
-      nw.data?.options?.forEach((o) => (o.uuid = crypto.randomUUID()));
+      nw.data.options.forEach((o) => (o.uuid = o.uuid ?? crypto.randomUUID()));
       nw.uuid = crypto.randomUUID();
       nw.ref_flow = flow.uuid!;
 
@@ -290,5 +295,50 @@ export class LocalStorageFlowService implements FlowService {
 
   async setAutosave(value: boolean): Promise<void> {
     this.storageService.setValue("autosave", value);
+  }
+
+  async addNodeOption(option: NodeOption): Promise<NodeOption> {
+    const storageNodes = await this.listNodes();
+
+    const node = storageNodes.find((n) => n.uuid === option.nodeUuid);
+
+    if (node) {
+      option.uuid = crypto.randomUUID();
+      option.nodeUuid = node.uuid;
+
+      node.data.options.push(option);
+
+      this.storageService.setValue<NodeModel[]>(
+        "nodes-repository",
+        storageNodes
+      );
+
+      return option;
+    }
+
+    throw new Error(`Node not found for option ${option}`);
+  }
+
+  async deleteNodeOption(option: NodeOption): Promise<void> {
+    const storageNodes = await this.listNodes();
+
+    const node = storageNodes.find((n) => n.uuid === option.nodeUuid);
+
+    if (node) {
+      const optionIndex = node.data.options.findIndex(
+        (o) => o.uuid === option.uuid
+      );
+
+      if (optionIndex > -1) {
+        node.data.options.splice(optionIndex, 1);
+      }
+
+      this.storageService.setValue<NodeModel[]>(
+        "nodes-repository",
+        storageNodes
+      );
+    }
+
+    throw new Error(`Node not found for option ${option}`);
   }
 }

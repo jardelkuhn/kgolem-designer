@@ -25,7 +25,7 @@ import { Container, ReactFlowWrapper } from "./styles";
 import { WhatsAppSidebar } from "../../pages/canvas/components/sidebars/whatsapp";
 import { useDnD } from "../dnd";
 import { DefaultProviderProps } from "../@interfaces";
-import { FlowModel } from "../../models";
+import { FlowModel, NodeOption } from "../../models";
 import { ManagersModule } from "../../managers/managers.module";
 import { Nullable } from "../../@types";
 
@@ -42,6 +42,9 @@ interface DesignerContextProps {
   readonly setFlow: (value: Nullable<FlowModel>) => void;
 
   readonly flows: FlowModel[];
+
+  readonly addOption: (designerId: string) => Promise<void>;
+  readonly deleteOption: (option: NodeOption) => Promise<void>;
 }
 
 export const DesignerContext = React.createContext<DesignerContextProps>(null!);
@@ -262,6 +265,49 @@ export function DesignerProvider(props: DefaultProviderProps) {
     [designerManager]
   );
 
+  const addOption = useCallback(
+    async (designerId: string) => {
+      const node = nodes.find((n) => n.id === designerId);
+
+      if (node) {
+        const option = await designerManager.createOption(node.id);
+
+        node.data.options.push(option);
+
+        setNodes((current) => {
+          return [...current.filter((n) => n.id !== designerId), node];
+        });
+      }
+    },
+    [designerManager, nodes, setNodes]
+  );
+
+  const deleteOption = useCallback(
+    async (option: NodeOption) => {
+      const node = nodes.find((n) => n.id === option.nodeDesignerId);
+
+      if (node) {
+        await designerManager.deleteOption(option);
+
+        const nodeIndex = node.data.options.findIndex(
+          (o) => o.designerId === option.designerId
+        );
+
+        if (nodeIndex > -1) {
+          node.data.options.splice(nodeIndex, 1);
+
+          setNodes((current) => {
+            return [
+              ...current.filter((n) => n.id !== option.nodeDesignerId),
+              node,
+            ];
+          });
+        }
+      }
+    },
+    [designerManager, nodes, setNodes]
+  );
+
   useEffect(() => {
     loadData();
   }, [loadData]);
@@ -280,7 +326,9 @@ export function DesignerProvider(props: DefaultProviderProps) {
       flows,
       setFlow,
       getHandles,
+      addOption,
       handleAutosave,
+      deleteOption,
     }),
     [
       nodeEntered,
@@ -289,9 +337,10 @@ export function DesignerProvider(props: DefaultProviderProps) {
       autosave,
       flow,
       flows,
-      setFlow,
       getHandles,
+      addOption,
       handleAutosave,
+      deleteOption,
     ]
   );
 

@@ -81,3 +81,6 @@ Learn:
 - Node options CRUD
 - Node description input
 - Design name
+- refactor uuid? props to Partial<>
+- improve errors and exceptions thrown
+- edges cleanup

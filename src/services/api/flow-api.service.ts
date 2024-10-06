@@ -1,4 +1,4 @@
-import { FlowModel, NodeModel, EdgeModel } from "../../models";
+import { FlowModel, NodeModel, EdgeModel, NodeOption } from "../../models";
 import { FlowService } from "../@interfaces";
 import { FlowDTO } from "../@types";
 
@@ -52,5 +52,11 @@ export class APIFlowService implements FlowService {
   }
   deleteEdges(edges: string[]): Promise<void> {
     throw new Error(`Method not implemented. ${edges}`);
+  }
+  addNodeOption(option: NodeOption): Promise<NodeOption> {
+    throw new Error(`Method not implemented. ${option}`);
+  }
+  deleteNodeOption(option: NodeOption): Promise<void> {
+    throw new Error(`Method not implemented. ${option}`);
   }
 }

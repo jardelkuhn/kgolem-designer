@@ -6,21 +6,21 @@ export const waParams: ProviderParams = {
 };
 
 export const waPlainTextParams: NodeParams = {
-  title: "Enviar texto",
+  title: "Send text",
   familyIcon: "bi bi-body-text",
   provider: waParams,
   type: CustomNodeType.WAPlainText,
 };
 
 export const waStartParams: NodeParams = {
-  title: "Início",
+  title: "Start",
   familyIcon: "bi bi-lightning-fill",
   provider: waParams,
   type: CustomNodeType.WAStart,
 };
 
 export const waOptionsParams: NodeParams = {
-  title: "Enviar opções",
+  title: "Send options",
   familyIcon: "bi bi-list-task",
   provider: waParams,
   type: CustomNodeType.WAOptions,

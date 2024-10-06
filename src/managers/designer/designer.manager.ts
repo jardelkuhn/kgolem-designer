@@ -7,7 +7,13 @@ import {
 import { plainToInstance } from "class-transformer";
 
 import { AppNode } from "../../pages/canvas/components/nodes/types";
-import { EdgeModel, FlowModel, NodeData, NodeModel } from "../../models";
+import {
+  EdgeModel,
+  FlowModel,
+  NodeData,
+  NodeModel,
+  NodeOption,
+} from "../../models";
 import { FlowModelBuilder } from "../../models/builders";
 import { LocaleService } from "../../services/common";
 import { Nullable } from "../../@types";
@@ -53,22 +59,8 @@ export class DesignerManager {
   }
 
   public getFlowModel(): Nullable<FlowModel> {
-    // Implement your loading logic here
-    return this.flowModel; // Retrieve from storage or API
+    return this.flowModel;
   }
-
-  // public getReactFlowInstance(): ReactFlowInstance<AppNode> {
-  //   if (!this.flowModel) {
-  //     throw new Error("Flow model is not loaded");
-  //   }
-
-  //   // Convert FlowModel to ReactFlowInstance if necessary
-  //   // Assuming ReactFlowInstance is based on nodes and edges
-  //   return {
-  //     nodes: [], // Transform FlowModel.nodes to ReactFlowInstance nodes
-  //     edges: [], // Transform FlowModel.edges to ReactFlowInstance edges
-  //   };
-  // }
 
   async listFlows(): Promise<FlowModel[]> {
     return await this.serviceModule.getFlowService().listFlows();
@@ -245,6 +237,47 @@ export class DesignerManager {
     await this.serviceModule
       .getFlowService()
       .deleteEdges(this.edgesModel.map((e) => e.uuid!));
+  }
+
+  async createOption(nodeDesignerId: string): Promise<NodeOption> {
+    const node = this.nodesModel.find((n) => n.designerId === nodeDesignerId);
+
+    if (node) {
+      let option = {
+        designerId: crypto.randomUUID(),
+        label: "Option",
+        nodeUuid: node.uuid,
+        nodeDesignerId: node.designerId,
+      } as NodeOption;
+
+      if (this.autosave) {
+        option = await this.serviceModule
+          .getFlowService()
+          .addNodeOption(option);
+      }
+
+      return option;
+    }
+
+    throw Error(`Node not found ${nodeDesignerId}`);
+  }
+
+  async deleteOption(option: NodeOption): Promise<void> {
+    const node = this.nodesModel.find(
+      (n) => n.designerId === option.nodeDesignerId
+    );
+
+    if (node) {
+      const optionIndex = node.data.options.findIndex(
+        (o) => o.designerId === option.designerId
+      );
+
+      node.data.options.splice(optionIndex, 1);
+
+      if (this.autosave) {
+        await this.serviceModule.getFlowService().deleteNodeOption(option);
+      }
+    }
   }
 
   async setAutosave(value: boolean): Promise<Nullable<FlowModel>> {

@@ -7,6 +7,10 @@ interface Props {
   color: ColorProps;
 }
 
+interface CrudProps extends Props {
+  loading: "yes" | "no";
+}
+
 export const Container = styled.div<Props>`
   position: relative;
   width: 100px;
@@ -148,4 +152,29 @@ export const OptionLabel = styled.span`
   width: 100%;
   ${getTitleFonts()};
   text-align: center;
+  margin-left: -14px;
+`;
+
+export const OptionContent = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+`;
+
+export const AddOptionIcon = styled.i`
+  z-index: 2;
+  font-size: 10px;
+`;
+
+export const OptionIcon = styled(AddOptionIcon)`
+  margin-left: 5px;
+  cursor: pointer;
+`;
+
+export const AddOptionContainer = styled(OptionContainer)<CrudProps>`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  cursor: ${(props) => (props.loading === "yes" ? "wait" : "pointer")};
 `;
