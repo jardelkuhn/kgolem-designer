@@ -14,6 +14,7 @@ const check = (type?: string): boolean => {
   return (
     type === CustomNodeType.WAOptions ||
     type === CustomNodeType.WAStart ||
-    type === CustomNodeType.WAPlainText
+    type === CustomNodeType.WAPlainText ||
+    type == CustomNodeType.WAAwaitUserInput
   );
 };

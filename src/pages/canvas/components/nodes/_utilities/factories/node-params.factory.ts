@@ -4,20 +4,23 @@ import {
   waStartParams,
   waOptionsParams,
   fallbackNodeParams,
+  waAwaitUserInputParams,
 } from "../params";
 
 class NodeParamsFactory {
   static create(type?: string): NodeParams {
-    if (type === CustomNodeType.WAPlainText) {
-      return waPlainTextParams;
-    }
+    switch (type) {
+      case CustomNodeType.WAPlainText:
+        return waPlainTextParams;
 
-    if (type === CustomNodeType.WAStart) {
-      return waStartParams;
-    }
+      case CustomNodeType.WAStart:
+        return waStartParams;
 
-    if (type === CustomNodeType.WAOptions) {
-      return waOptionsParams;
+      case CustomNodeType.WAOptions:
+        return waOptionsParams;
+
+      case CustomNodeType.WAAwaitUserInput:
+        return waAwaitUserInputParams;
     }
 
     return fallbackNodeParams;

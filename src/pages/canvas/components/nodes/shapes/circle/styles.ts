@@ -89,8 +89,8 @@ export const RoundedMiddleLabel = styled.span`
 export const ProviderCircle = styled.div`
   z-index: 2;
   position: absolute;
-  top: -5px;
-  left: -0px;
+  top: 5px;
+  left: -5px;
   width: 20px; /* Adjust the size as needed */
   height: 20px; /* Adjust the size as needed */
   background: white;

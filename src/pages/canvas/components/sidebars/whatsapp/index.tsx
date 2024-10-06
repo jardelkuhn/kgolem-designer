@@ -5,6 +5,7 @@ import { useDnD } from "../../../../../context/dnd";
 import { WAStartDnD } from "../../nodes/wa/start/dnd";
 import { waColors } from "../../nodes/_utilities/colors";
 import {
+  waAwaitUserInputParams,
   waOptionsParams,
   waPlainTextParams,
   waStartParams,
@@ -14,6 +15,7 @@ import { WAPlainTextDnD } from "../../nodes/wa/plain-text/dnd";
 import { WAOptionsDnD } from "../../nodes/wa/options/dnd";
 import { useDesigner } from "../../../../../context/designer";
 import { SidebarProps } from "../@interfaces";
+import { WAAwaitUserInputDnd } from "../../nodes/wa/await-user-input/dnd";
 
 export function WhatsAppSidebar({
   onSave,
@@ -62,6 +64,11 @@ export function WhatsAppSidebar({
       <WAOptionsDnD
         color={waColors}
         params={waOptionsParams}
+        onDragStart={onDragStart}
+      />
+      <WAAwaitUserInputDnd
+        color={waColors}
+        params={waAwaitUserInputParams}
         onDragStart={onDragStart}
       />
 

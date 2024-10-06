@@ -25,3 +25,10 @@ export const waOptionsParams: NodeParams = {
   provider: waParams,
   type: CustomNodeType.WAOptions,
 };
+
+export const waAwaitUserInputParams: NodeParams = {
+  title: "Await user",
+  familyIcon: "bi bi-clock",
+  provider: waParams,
+  type: CustomNodeType.WAAwaitUserInput,
+};
