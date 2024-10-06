@@ -21,7 +21,7 @@
 
 </div>
 
-![](https://github.com/jackanakin/jackchat-canvas/blob/main/history/components/22092024.png?raw=true)
+![](https://github.com/jackanakin/jackchat-canvas/blob/main/history/components/05102024.png?raw=true)
 
 ## Getting up and running
 
