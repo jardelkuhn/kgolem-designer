@@ -1,9 +1,6 @@
-import { plainToInstance } from "class-transformer";
-
-import { EdgeModel, FlowModel, NodeModel, NodeOption } from "../../models";
 import { FlowService } from "../@interfaces";
-import { FlowDTO } from "../@types";
 import { LocalStorageService } from "./repository";
+import { DesignerDTO, EdgeDTO, FlowDTO, NodeDTO, NodeOptionDTO } from "../dtos";
 
 export class LocalStorageFlowService implements FlowService {
   private static instance: LocalStorageFlowService;
@@ -19,51 +16,48 @@ export class LocalStorageFlowService implements FlowService {
 
   private readonly storageService = LocalStorageService.getInstance();
 
-  async listFlows(): Promise<FlowModel[]> {
-    const result =
-      this.storageService.getValue<FlowModel[]>("flows-repository");
+  async listFlows(): Promise<FlowDTO[]> {
+    const result = this.storageService.getValue<FlowDTO[]>("flows-repository");
 
-    return result ? plainToInstance(FlowModel, result) : [];
+    return result ?? [];
   }
 
-  async listNodes(): Promise<NodeModel[]> {
-    const result =
-      this.storageService.getValue<NodeModel[]>("nodes-repository");
+  async listNodes(): Promise<NodeDTO[]> {
+    const result = this.storageService.getValue<NodeDTO[]>("nodes-repository");
 
-    return result ? plainToInstance(NodeModel, result) : [];
+    return result ?? [];
   }
 
-  async listEdges(): Promise<EdgeModel[]> {
-    const result =
-      this.storageService.getValue<EdgeModel[]>("edges-repository");
+  async listEdges(): Promise<EdgeDTO[]> {
+    const result = this.storageService.getValue<EdgeDTO[]>("edges-repository");
 
-    return result ? plainToInstance(EdgeModel, result) : [];
+    return result ?? [];
   }
 
-  async saveFlow({ flow, nodes, edges }: FlowDTO): Promise<FlowDTO> {
-    // FLOW
-    flow.uuid = flow.uuid ?? crypto.randomUUID();
-
+  async saveFlow({ flow, nodes, edges }: DesignerDTO): Promise<DesignerDTO> {
     const storageFlows = await this.listFlows();
 
     const isUpdate = storageFlows.findIndex((f) => f.uuid === flow.uuid);
 
+    let flowUpdate = { ...flow };
+
     if (isUpdate > -1) {
-      storageFlows[isUpdate] = {
+      flowUpdate = {
         ...storageFlows[isUpdate],
         title: flow.title,
         viewport: flow.viewport,
         updatedAt: new Date(),
       };
+
+      storageFlows[isUpdate] = flowUpdate;
     } else {
-      storageFlows.push({
-        uuid: flow.uuid,
-        title: flow.title,
-        viewport: flow.viewport,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      });
+      flowUpdate.uuid = crypto.randomUUID();
+      flowUpdate.createdAt = new Date();
+      flowUpdate.updatedAt = new Date();
+
+      storageFlows.push(flowUpdate);
     }
+
     ///////////////
     // END OF FLOW
     //////////////
@@ -75,7 +69,7 @@ export class LocalStorageFlowService implements FlowService {
     const newNodes = nodes.filter((n) => !n.uuid);
     const updateNodes = nodes.filter((n) => !!n.uuid);
     const removedNodes = storageNodes
-      .filter((storedNode) => storedNode.ref_flow === flow.uuid)
+      .filter((storedNode) => storedNode.ref_flow === flowUpdate.uuid)
       .filter(
         (storedNode) =>
           !updateNodes.some(
@@ -103,7 +97,7 @@ export class LocalStorageFlowService implements FlowService {
     newNodes.forEach((nw) => {
       nw.data.options.forEach((o) => (o.uuid = o.uuid ?? crypto.randomUUID()));
       nw.uuid = crypto.randomUUID();
-      nw.ref_flow = flow.uuid!;
+      nw.ref_flow = flowUpdate.uuid!;
 
       storageNodes.push(nw);
     });
@@ -128,7 +122,7 @@ export class LocalStorageFlowService implements FlowService {
     const newEdges = edges.filter((e) => !e.uuid);
     const updateEdges = edges.filter((e) => !!e.uuid);
     const removedEdges = storageEdges
-      .filter((storedEdge) => storedEdge.ref_flow === flow.uuid)
+      .filter((storedEdge) => storedEdge.ref_flow === flowUpdate.uuid)
       .filter(
         (storedEdge) =>
           !updateEdges.some(
@@ -153,7 +147,7 @@ export class LocalStorageFlowService implements FlowService {
     // add new edges
     newEdges.forEach((ne) => {
       ne.uuid = crypto.randomUUID();
-      ne.ref_flow = flow.uuid!;
+      ne.ref_flow = flowUpdate.uuid!;
 
       storageEdges.push(ne);
     });
@@ -178,13 +172,13 @@ export class LocalStorageFlowService implements FlowService {
 
     // return value
     return {
-      flow: flow,
-      nodes: storageNodes.filter((n) => n.ref_flow === flow.uuid),
-      edges: storageEdges.filter((e) => e.ref_flow === flow.uuid),
+      flow: flowUpdate,
+      nodes: storageNodes.filter((n) => n.ref_flow === flowUpdate.uuid),
+      edges: storageEdges.filter((e) => e.ref_flow === flowUpdate.uuid),
     };
   }
 
-  async loadFlow(uuid: string): Promise<FlowDTO> {
+  async loadFlow(uuid: string): Promise<DesignerDTO> {
     const flow = (await this.listFlows()).find((f) => f.uuid === uuid);
 
     if (!flow) {
@@ -211,7 +205,7 @@ export class LocalStorageFlowService implements FlowService {
     this.storageService.setValue("edges-repository", edges);
   }
 
-  async createNode(partial: Partial<NodeModel>): Promise<NodeModel> {
+  async createNode(partial: Partial<NodeDTO>): Promise<NodeDTO> {
     const uuid = crypto.randomUUID();
 
     const newNode = {
@@ -221,7 +215,7 @@ export class LocalStorageFlowService implements FlowService {
       data: partial.data ?? { label: "unknown", options: [] },
       designerId: partial.designerId,
       ref_flow: partial.ref_flow,
-    } as NodeModel;
+    } as NodeDTO;
 
     const storageNodes = await this.listNodes();
 
@@ -232,12 +226,12 @@ export class LocalStorageFlowService implements FlowService {
     return newNode;
   }
 
-  async createEdge(partial: Partial<EdgeModel>): Promise<EdgeModel> {
+  async createEdge(partial: Partial<EdgeDTO>): Promise<EdgeDTO> {
     const uuid = crypto.randomUUID();
 
     partial.uuid = uuid;
 
-    const newEdge = partial as EdgeModel;
+    const newEdge = partial as EdgeDTO;
 
     const storageEdges = await this.listEdges();
 
@@ -248,7 +242,7 @@ export class LocalStorageFlowService implements FlowService {
     return newEdge;
   }
 
-  async updateNodes(nodes: NodeModel[]): Promise<NodeModel[]> {
+  async updateNodes(nodes: NodeDTO[]): Promise<NodeDTO[]> {
     const storageNodes = await this.listNodes();
 
     const updated = storageNodes.map((each) => {
@@ -297,7 +291,7 @@ export class LocalStorageFlowService implements FlowService {
     this.storageService.setValue("autosave", value);
   }
 
-  async addNodeOption(option: NodeOption): Promise<NodeOption> {
+  async addNodeOption(option: NodeOptionDTO): Promise<NodeOptionDTO> {
     const storageNodes = await this.listNodes();
 
     const node = storageNodes.find((n) => n.uuid === option.nodeUuid);
@@ -308,10 +302,7 @@ export class LocalStorageFlowService implements FlowService {
 
       node.data.options.push(option);
 
-      this.storageService.setValue<NodeModel[]>(
-        "nodes-repository",
-        storageNodes
-      );
+      this.storageService.setValue<NodeDTO[]>("nodes-repository", storageNodes);
 
       return option;
     }
@@ -319,7 +310,7 @@ export class LocalStorageFlowService implements FlowService {
     throw new Error(`Node not found for option ${option}`);
   }
 
-  async deleteNodeOption(option: NodeOption): Promise<void> {
+  async deleteNodeOption(option: NodeOptionDTO): Promise<void> {
     const storageNodes = await this.listNodes();
 
     const node = storageNodes.find((n) => n.uuid === option.nodeUuid);
@@ -333,10 +324,7 @@ export class LocalStorageFlowService implements FlowService {
         node.data.options.splice(optionIndex, 1);
       }
 
-      this.storageService.setValue<NodeModel[]>(
-        "nodes-repository",
-        storageNodes
-      );
+      this.storageService.setValue<NodeDTO[]>("nodes-repository", storageNodes);
     }
 
     throw new Error(`Node not found for option ${option}`);

@@ -8,6 +8,7 @@ import { plainToInstance } from "class-transformer";
 
 import { AppNode } from "../../pages/canvas/components/nodes/types";
 import {
+  DesignerModel,
   EdgeModel,
   FlowModel,
   NodeData,
@@ -17,10 +18,10 @@ import {
 import { FlowModelBuilder } from "../../models/builders";
 import { LocaleService } from "../../services/common";
 import { Nullable } from "../../@types";
-import { FlowDTO } from "../../services/@types";
 import { CustomNodeType } from "../../pages/canvas/components/nodes/@interfaces";
 import { ServicesModule } from "../../services/services.module";
 import { CustomEdgeType } from "../../pages/canvas/components/edges/@interfaces";
+import { DesignerDTO } from "../../services/dtos";
 
 export class DesignerManager {
   private static instance: DesignerManager;
@@ -63,17 +64,23 @@ export class DesignerManager {
   }
 
   async listFlows(): Promise<FlowModel[]> {
-    return await this.serviceModule.getFlowService().listFlows();
+    const result = await this.serviceModule.getFlowService().listFlows();
+
+    return result ? plainToInstance(FlowModel, result) : [];
   }
 
-  async loadFlow(uuid: string): Promise<FlowDTO> {
-    const flow = await this.serviceModule.getFlowService().loadFlow(uuid);
+  async loadFlow(uuid: string): Promise<DesignerModel> {
+    const designer = await this.serviceModule.getFlowService().loadFlow(uuid);
 
-    this.flowModel = flow.flow;
-    this.edgesModel = flow.edges;
-    this.nodesModel = flow.nodes;
+    this.flowModel = plainToInstance(FlowModel, designer.flow);
+    this.edgesModel = plainToInstance(EdgeModel, designer.edges);
+    this.nodesModel = plainToInstance(NodeModel, designer.nodes);
 
-    return flow;
+    return {
+      flow: this.flowModel,
+      nodes: this.nodesModel,
+      edges: this.edgesModel,
+    };
   }
 
   async deleteFlow(uuid: string): Promise<void> {
@@ -147,9 +154,9 @@ export class DesignerManager {
           edges: Object.values(mergedEdges),
         });
 
-      this.flowModel = flow;
-      this.nodesModel = nodes;
-      this.edgesModel = edges;
+      this.flowModel = plainToInstance(FlowModel, flow);
+      this.nodesModel = plainToInstance(NodeModel, nodes);
+      this.edgesModel = plainToInstance(EdgeModel, edges);
     }
   }
 
@@ -160,11 +167,11 @@ export class DesignerManager {
     let nodeModel = NodeModel.build(position, type, this.flowModel?.uuid);
 
     if (this.autosave) {
-      nodeModel = await this.serviceModule
+      const result = await this.serviceModule
         .getFlowService()
         .createNode(nodeModel);
 
-      nodeModel = plainToInstance(NodeModel, nodeModel);
+      nodeModel = plainToInstance(NodeModel, result);
     }
 
     this.nodesModel.push(nodeModel);
@@ -180,11 +187,11 @@ export class DesignerManager {
     );
 
     if (this.autosave) {
-      edgeModel = await this.serviceModule
+      const result = await this.serviceModule
         .getFlowService()
         .createEdge(edgeModel);
 
-      edgeModel = plainToInstance(EdgeModel, edgeModel);
+      edgeModel = plainToInstance(EdgeModel, result);
     }
 
     this.edgesModel.push(edgeModel);
@@ -206,7 +213,7 @@ export class DesignerManager {
     }
   }
 
-  async newFlow(): Promise<FlowDTO> {
+  async newFlow(): Promise<DesignerModel> {
     this.reset();
 
     return this.createFlow({
@@ -290,7 +297,7 @@ export class DesignerManager {
           .getFlowService()
           .updateNodes([node]);
 
-        return result[0];
+        return plainToInstance(NodeModel, result[0]);
       }
 
       return node;
@@ -325,15 +332,21 @@ export class DesignerManager {
     return result;
   }
 
-  private async createFlow(flowDto: FlowDTO): Promise<FlowDTO> {
-    const flow = await this.serviceModule.getFlowService().saveFlow({
-      flow: flowDto.flow,
-      nodes: Object.values(flowDto.nodes),
-      edges: Object.values(flowDto.edges),
+  private async createFlow(dto: DesignerDTO): Promise<DesignerModel> {
+    const result = await this.serviceModule.getFlowService().saveFlow({
+      flow: dto.flow,
+      nodes: Object.values(dto.nodes),
+      edges: Object.values(dto.edges),
     });
 
-    this.flowModel = flow.flow;
+    this.flowModel = plainToInstance(FlowModel, result.flow);
+    this.nodesModel = plainToInstance(NodeModel, result.nodes);
+    this.edgesModel = plainToInstance(EdgeModel, result.edges);
 
-    return flow;
+    return {
+      flow: this.flowModel,
+      nodes: this.nodesModel,
+      edges: this.edgesModel,
+    };
   }
 }

@@ -1,6 +1,5 @@
-import { FlowModel, NodeModel, EdgeModel, NodeOption } from "../../models";
 import { FlowService } from "../@interfaces";
-import { FlowDTO } from "../@types";
+import { DesignerDTO, EdgeDTO, FlowDTO, NodeDTO, NodeOptionDTO } from "../dtos";
 
 export class APIFlowService implements FlowService {
   private static instance: APIFlowService;
@@ -14,31 +13,31 @@ export class APIFlowService implements FlowService {
 
   private constructor() {}
 
-  listFlows(): Promise<FlowModel[]> {
+  listFlows(): Promise<FlowDTO[]> {
     throw new Error("Method not implemented.");
   }
-  listNodes(): Promise<NodeModel[]> {
+  listNodes(): Promise<NodeDTO[]> {
     throw new Error("Method not implemented.");
   }
-  listEdges(): Promise<EdgeModel[]> {
+  listEdges(): Promise<EdgeDTO[]> {
     throw new Error("Method not implemented.");
   }
-  loadFlow(uuid: string): Promise<FlowDTO> {
+  loadFlow(uuid: string): Promise<DesignerDTO> {
     throw new Error(`Method not implemented. ${uuid}`);
   }
-  saveFlow(model: FlowDTO): Promise<FlowDTO> {
+  saveFlow(model: DesignerDTO): Promise<DesignerDTO> {
     throw new Error(`Method not implemented. ${model}`);
   }
   deleteFlow(uuid: string): Promise<void> {
     throw new Error(`Method not implemented. ${uuid}`);
   }
-  createNode(partial: Partial<NodeModel>): Promise<NodeModel> {
+  createNode(partial: Partial<NodeDTO>): Promise<NodeDTO> {
     throw new Error(`Method not implemented. ${partial}`);
   }
-  createEdge(partial: Partial<EdgeModel>): Promise<EdgeModel> {
+  createEdge(partial: Partial<EdgeDTO>): Promise<EdgeDTO> {
     throw new Error(`Method not implemented. ${partial}`);
   }
-  updateNodes(nodes: NodeModel[]): Promise<NodeModel[]> {
+  updateNodes(nodes: NodeDTO[]): Promise<NodeDTO[]> {
     throw new Error(`Method not implemented. ${nodes}`);
   }
   getAutosave(): Promise<boolean> {
@@ -53,10 +52,10 @@ export class APIFlowService implements FlowService {
   deleteEdges(edges: string[]): Promise<void> {
     throw new Error(`Method not implemented. ${edges}`);
   }
-  addNodeOption(option: NodeOption): Promise<NodeOption> {
+  addNodeOption(option: NodeOptionDTO): Promise<NodeOptionDTO> {
     throw new Error(`Method not implemented. ${option}`);
   }
-  deleteNodeOption(option: NodeOption): Promise<void> {
+  deleteNodeOption(option: NodeOptionDTO): Promise<void> {
     throw new Error(`Method not implemented. ${option}`);
   }
 }

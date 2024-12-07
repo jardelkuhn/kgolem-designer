@@ -81,4 +81,8 @@ Learn:
 - Node options CRUD (modal, editors)
 - refactor uuid? props to Partial<>
 - improve errors and exceptions thrown
+
+## ISSUES
 - edges cleanup
+- when an option is removed, must remove the edges
+- when an element is removed, must remove the edges
