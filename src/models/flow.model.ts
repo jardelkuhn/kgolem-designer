@@ -19,6 +19,6 @@ export class FlowModel {
     zoom: number;
   };
 
-  createdAt: Date = new Date();
-  updatedAt: Date = new Date();
+  createdAt: Nullable<Date> = new Date();
+  updatedAt: Nullable<Date> = new Date();
 }

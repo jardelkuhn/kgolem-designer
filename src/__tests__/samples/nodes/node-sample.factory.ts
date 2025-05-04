@@ -25,7 +25,7 @@ export class NodeSampleFactory {
     position,
     type,
     flowUuid,
-    description,
+    // description,
     options = [],
     persisted = true,
   }: NodeSampleOptions): NodeModel {
