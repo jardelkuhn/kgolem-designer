@@ -9,6 +9,7 @@ import {
   waVideoParams,
   waDocumentParams,
   waTemplateParams,
+  waConcludeParams,
 } from "../params";
 
 class NodeParamsFactory {
@@ -19,6 +20,9 @@ class NodeParamsFactory {
 
       case CustomNodeType.WAStart:
         return waStartParams;
+
+      case CustomNodeType.WAConclude:
+        return waConcludeParams;
 
       case CustomNodeType.WAOptions:
         return waOptionsParams;

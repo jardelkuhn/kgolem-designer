@@ -8,9 +8,11 @@ import { WAImageNode } from "./wa/image/node";
 import { WAVideoNode } from "./wa/video/node";
 import { WADocumentNode } from "./wa/document/node";
 import { WATemplateNode } from "./wa/template/node";
+import { WAConcludeNode } from "./wa/conclude/node";
 
 export const nodeTypes: AppNodeTypes = {
   WAStart: WAStartNode,
+  WAConclude: WAConcludeNode,
   WAOptions: WAOptionsNode,
   WAPlainText: WAPlainTextNode,
   WAAwaitText: WAAwaitTextNode,

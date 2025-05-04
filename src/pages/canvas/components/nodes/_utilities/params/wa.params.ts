@@ -21,6 +21,14 @@ export const waStartParams: NodeParams = {
   textContent: true,
 };
 
+export const waConcludeParams: NodeParams = {
+  title: "Conclude",
+  familyIcon: "bi bi-flag-fill",
+  provider: waParams,
+  type: CustomNodeType.WAConclude,
+  textContent: true,
+};
+
 export const waOptionsParams: NodeParams = {
   title: "Send options",
   familyIcon: "bi bi-list-task",

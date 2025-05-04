@@ -68,7 +68,6 @@ React Flow and Svelte Flow are maintained by the team behind [xyflow](https://xy
 Links:
 
 - [React Flow - Docs](https://reactflow.dev)
-- [React Flow - Discord](https://discord.com/invite/Bqt6xrs)
 
 Learn:
 
@@ -81,6 +80,8 @@ Learn:
 - Node options CRUD (modal, editors)
 - refactor uuid? props to Partial<>
 - improve errors and exceptions thrown
+- Implement queue for syncronized operations
+- Refactor designer provider functions into services
 
 ## ISSUES
 - edges cleanup

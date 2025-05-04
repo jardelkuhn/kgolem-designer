@@ -6,6 +6,7 @@ import { WAStartDnD } from "../../nodes/wa/start/dnd";
 import { waColors } from "../../nodes/_utilities/colors";
 import {
   waAwaitTextParams,
+  waConcludeParams,
   waDocumentParams,
   waImageParams,
   waOptionsParams,
@@ -24,6 +25,7 @@ import { WAImageDnD } from "../../nodes/wa/image/dnd";
 import { WAVideoDnD } from "../../nodes/wa/video/dnd";
 import { WADocumentDnD } from "../../nodes/wa/document/dnd";
 import { WATemplateDnD } from "../../nodes/wa/template/dnd";
+import { WAConcludeDnD } from "../../nodes/wa/conclude/dnd";
 
 export function WhatsAppSidebar({
   onSave,
@@ -64,6 +66,11 @@ export function WhatsAppSidebar({
       <WAStartDnD
         color={waColors}
         params={waStartParams}
+        onDragStart={onDragStart}
+      />
+      <WAConcludeDnD
+        color={waColors}
+        params={waConcludeParams}
         onDragStart={onDragStart}
       />
       <WAAwaitTextDnd

@@ -1,5 +1,6 @@
 export enum CustomNodeType {
   WAStart = "WAStart",
+  WAConclude = "WAConclude",
   WAOptions = "WAOptions",
   WAPlainText = "WAPlainText",
   WAAwaitText = "WAAwaitText",
@@ -12,6 +13,7 @@ export enum CustomNodeType {
 
 export const WA_NODE_TYPES = [
   CustomNodeType.WAStart,
+  CustomNodeType.WAConclude,
   CustomNodeType.WAOptions,
   CustomNodeType.WAPlainText,
   CustomNodeType.WAAwaitText,

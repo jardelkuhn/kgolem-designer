@@ -3,6 +3,7 @@ import type { Node } from "@xyflow/react";
 import { NodeData } from "../../../../../models";
 
 export type WAStartNodeType = Node<NodeData, "WAStart">;
+export type WAConcludeNodeType = Node<NodeData, "WAConclude">;
 export type WAPlainTextNodeType = Node<NodeData, "WAPlainText">;
 export type WAOptionsNodeType = Node<NodeData, "WAOptions">;
 export type WAAwaitTextNodeType = Node<NodeData, "WAAwaitText">;
@@ -13,6 +14,7 @@ export type WATemplateNodeType = Node<NodeData, "WATemplate">;
 
 export type WANode =
   | WAStartNodeType
+  | WAConcludeNodeType
   | WAPlainTextNodeType
   | WAOptionsNodeType
   | WAAwaitTextNodeType
